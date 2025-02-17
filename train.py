@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from torch.optim import Adam
-# from unet import *
+from datetime import datetime
 import numpy as np
 import torch.nn.functional as F
 from dataset import *
@@ -10,7 +10,7 @@ from utils import *
 from torch.optim.lr_scheduler import StepLR
 # from torch.utils.data import TensorDataset, DataLoader
 from utils.tools import *
-# from cdrn_model import DnCNNMultiBlock
+from net.cdrn import DnCNNMultiBlock,DnCNN_MultiBlock_ds
 # from unet_1d import UNet1D,SDUNet1D,AttnSDUNet1D,SE_SDUNet1D,SE_UNet1D,SDUNet1D_3l
 from net.build_model import *
 
@@ -56,7 +56,7 @@ def valid(model, dataloader):
     
 def train(model, dataloader, epochs=10, lr=1e-4):
     optimizer = Adam(model.parameters(), lr=lr, weight_decay=1e-3)
-    scheduler = StepLR(optimizer, step_size=80, gamma=0.1)
+    scheduler = StepLR(optimizer, step_size=250, gamma=0.1)
     # criterion = nn.MSELoss()
     criterion = nn.L1Loss()
     print('loss function::',criterion)
@@ -94,7 +94,8 @@ def train(model, dataloader, epochs=10, lr=1e-4):
         ls_nmse = float(f"{ls_nmse:.6f}")  # 保留 6 位小数
         nmse_train = float(f"{nmse_train:.6f}")  # 保留 6 位小数
 
-        print(f"Epoch {epoch + 1}/{epochs}, Loss: {loss.item():.6f}, Train_MMSE: {nmse_train}, NMMSE: {nmmse}, LS_NMSE: {ls_nmse} Lr:{ optimizer.param_groups[0]['lr']}")
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[{current_time}] Epoch {epoch + 1}/{epochs}, Loss: {loss.item():.6f}, Train_MMSE: {nmse_train}, NMMSE: {nmmse}, LS_NMSE: {ls_nmse}, Lr: {optimizer.param_groups[0]['lr']}")
 
 def main_MSetup():
     config_path = 'conf/config_multisetup.yml'
@@ -110,13 +111,16 @@ def main_MSetup():
 
     # model = SDUNet1D_3l(2,2,32).to(device)
     
-    model = DiaUNet1D(2,2,32).to(device)
+    model = DnCNN_MultiBlock_ds(block=3, depth=16, image_channels=2, use_bnorm=True).to(device)
+    # model = DiaUNet1D(2,2,cfg.model.channel_index,cfg.model.num_layers).to(device)
+    total_params = sum(p.numel() for p in model.parameters())  # 所有参数总数
+    model_size_mb = total_params * 4 / 1024**2  # float32 => 4 bytes
 
+    
     print("config_path:",config_path)
     print('cfg:',cfg)
     print("model::",model)
-    train(model, dataloader, epochs=400, lr=1e-2)
+    print(f"Estimated model size: {model_size_mb:.2f} MB")
+    train(model, dataloader, epochs=50, lr=1e-3)
 
-if __name__ == '__main__':
-
-    main_MSetup()
+main_MSetup()

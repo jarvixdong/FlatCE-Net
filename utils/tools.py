@@ -89,7 +89,7 @@ def cal_NMSE_by_matpath_h5(path,name):
     print('H shape:',H_noisy.shape,H_clean.shape)
     x_data = np.concatenate([H_noisy['real'][:,np.newaxis,:,:],H_noisy['imag'][:,np.newaxis,:,:]],axis=1)#.transpose(3,0,1,2)
     y_data = np.concatenate([H_clean['real'][:,np.newaxis,:,:],H_clean['imag'][:,np.newaxis,:,:]],axis=1)#.transpose(3,0,1,2)
-    print('xdata in cal_NMSE_by_matpath_h5:',x_data.shape)
+    # print('xdata in cal_NMSE_by_matpath_h5:',x_data.shape)
     nmse = cal_NMSE3(x_data,y_data)
     return nmse
 
@@ -139,7 +139,7 @@ def get_mat_inv(A):
 class Logger(object):
     def __init__(self, file):
         self.terminal = sys.stdout  # 保存原始标准输出
-        self.log = open(file, "w")  # 打开日志文件
+        self.log = open(file, "a")  # 打开日志文件
 
     def write(self, message):
         self.terminal.write(message)  # 输出到控制台

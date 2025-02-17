@@ -3,13 +3,13 @@ tic
 K = 4; % Number of users
 M = 4; % Number of antennas 32,16,8,4,2
 
-L = 3; % Number of SIM layers
+L = 4; % Number of SIM layers
 N = 36; % Number of elements per SIM layer
 
 % sigma2 = db2pow(-126); % Noise power: -96 dBm (-126 dB)
 sigma2 = 1; % Noise power: 0dB
 frequency = 2*10^(9); % Carrier frequency
-Pt_dB = -25; % Transmit power: 10 dBm (-20 dB)
+Pt_dB = -5; % Transmit power: 10 dBm (-20 dB)
 Pt = db2pow(Pt_dB); % Transmit power
 tau_p = K; % Pilot length
 
@@ -30,7 +30,7 @@ theta = exp(1i.*phase);
 MSE_LS_avg = 0;
 MSE_MMSE_avg = 0;
 H_norm_avg = 0;
-setup_num = 100; % In each setup, user locations are randomly generated
+setup_num = 10; % In each setup, user locations are randomly generated
 realization_num = 1000; % Number of channel realizations per setup
 
 H_all = zeros(N,K,setup_num*realization_num);
@@ -84,7 +84,7 @@ H_est_LS_all_test = H_est_LS_all(:,:,end-valid_num+1:end);
 H_est_MMSE_all_test = H_est_MMSE_all(:,:,end-valid_num+1:end);
 V_pinv_LS_all_test = V_pinv_LS_all(:,:,end-valid_num+1:end);
 
-dir_path = '/mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset9_N36K4/';
+dir_path = '/mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset9_N36K4_v2/';
 % train_data_path = strcat(dir_path, 'train','_Dataset_dB', num2str(Pt_dB), '_N', num2str(N), '_K', num2str(K), '_L', num2str(L), '_S', num2str(S), '_Setup', num2str(setup_num), '_Reliz', num2str(realization_num),'_v1', '.mat')
 % valid_data_path = strcat(dir_path, 'valid','_Dataset_dB', num2str(Pt_dB), '_N', num2str(N), '_K', num2str(K), '_L', num2str(L), '_S', num2str(S), '_Setup', num2str(setup_num), '_Reliz', num2str(realization_num),'_v1', '.mat');
 

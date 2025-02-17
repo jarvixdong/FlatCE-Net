@@ -1,8 +1,8 @@
 seed: 10
 
 dataset:
-  train_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset9_N36K4/train_Dataset_dB-25_N36_K4_L6_S9_Setup100_Reliz1000.mat
-  valid_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset9_N36K4/valid_Dataset_dB-25_N36_K4_L6_S9_Setup100_Reliz1000.mat
+  train_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset9_N36K4/train_Dataset_dB-25_N36_K4_L4_S12_Setup100_Reliz1000.mat
+  valid_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset9_N36K4/valid_Dataset_dB-25_N36_K4_L4_S12_Setup100_Reliz1000.mat
 
   # train_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset9_N36K4/train_Dataset_dB-25_N36_K4_L4_S10_Setup100_Reliz1000.mat
   # valid_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset9_N36K4/valid_Dataset_dB-25_N36_K4_L4_S10_Setup100_Reliz1000.mat
@@ -15,6 +15,7 @@ dataloader:
 
 model:
   channel_index: 32
+  num_layers: 3
 
 logger:
-  path: logger/060225/DiaUNet1D_3l_C32_dB-25_N36K4M4_L6_S9_Set100_reaL1000_L1loss_0502_lr1e2.log
+  path: logger/120225/DnCNNMultiBlock_B3Depth16_dB-15_N36K4M4_L4_S9_Set100_reaL1000_L1loss_1202_lr1e3.log
