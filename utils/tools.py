@@ -67,6 +67,58 @@ def cal_NMSE3(H_noise, H_clean):
     return nmmse_mean
 
 
+def cal_NMSE4(H_noise, H_clean):
+    H_dis = (H_noise - H_clean) ** 2
+    H_clean_sq = H_clean ** 2
+
+    H_dis_sum = H_dis.sum(axis=( 1, 2, 3))
+    H_clean_sq_sum = H_clean_sq.sum(axis=( 1, 2, 3))
+    # print("H_dis_sum",H_dis_sum)
+    # print("H_clean_sq_sum:",H_clean_sq_sum)
+    
+    nmmse_mean = H_dis_sum.mean()/H_clean_sq_sum.mean()
+    
+    return nmmse_mean
+
+def cal_NMSE_norm(H_noise, H_clean):
+    print("H noise :",H_noise.shape)
+    # # print("complex dis::",np.linalg.norm(H_noise[:,0,:,:]+1j*H_noise[:,1,:,:] - H_clean[:,0,:,:]+1j*H_clean[:,1,:,:], 'fro')**2/np.linalg.norm(H_clean[:,0,:,:]+1j*H_clean[:,1,:,:])**2)
+    # # 差值复数张量 (batch, H, W)
+    # diff = (H_noise[:,0,:,:] + 1j*H_noise[:,1,:,:]) - (H_clean[:,0,:,:] + 1j*H_clean[:,1,:,:])
+
+    # # 计算 Frobenius 范数的平方: sum of |diff|^2
+    # fro_norm_sq = np.sum(np.abs(diff)**2)
+
+    # # 如果需要 Frobenius 范数本身:
+    # fro_norm = np.sqrt(fro_norm_sq)
+
+    # # 同理，真值的范数平方:
+    # fro_norm_sq_clean = np.sum(np.abs(H_clean[:,0,:,:] + 1j*H_clean[:,1,:,:])**2)
+
+    # # 计算 NMSE = ||diff||^2 / ||clean||^2
+    # nmse = fro_norm_sq / fro_norm_sq_clean
+
+    # print("NMSE =", nmse)
+    
+    
+    H_dis = (H_noise - H_clean) ** 2
+    H_clean_sq = H_clean ** 2
+
+
+    H_dis_sum = H_dis.sum(axis=( 1, 2, 3))
+    H_clean_sq_sum = H_clean_sq.sum(axis=( 1, 2, 3))
+    print("H_dis_sum",H_dis_sum.shape)
+    print("H_clean_sq_sum:",H_clean_sq_sum)
+
+    
+    nmmse_batch = H_dis_sum /H_clean_sq_sum
+    nmmse_mean = nmmse_batch.mean()
+    print("nmmse batch mean:",nmmse_mean)
+    print("mse whole mean:",H_dis_sum.mean() /H_clean_sq_sum.mean())
+    
+    return nmmse_mean
+
+
 def cal_NMSE_by_matpath(path,name):
     
     data = loadmat(path)
@@ -90,7 +142,9 @@ def cal_NMSE_by_matpath_h5(path,name):
     x_data = np.concatenate([H_noisy['real'][:,np.newaxis,:,:],H_noisy['imag'][:,np.newaxis,:,:]],axis=1)#.transpose(3,0,1,2)
     y_data = np.concatenate([H_clean['real'][:,np.newaxis,:,:],H_clean['imag'][:,np.newaxis,:,:]],axis=1)#.transpose(3,0,1,2)
     # print('xdata in cal_NMSE_by_matpath_h5:',x_data.shape)
-    nmse = cal_NMSE3(x_data,y_data)
+    # nmse = cal_NMSE3(x_data,y_data)
+    nmse = cal_NMSE4(x_data,y_data)
+    # nmse = cal_NMSE_norm(x_data,y_data)
     return nmse
 
 # path = '/mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset6_withVpinv/valid_Dataset_dB-5_N32_K16_L10_S8_Setup1000_Reliz100.mat'

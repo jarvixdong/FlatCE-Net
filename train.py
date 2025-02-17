@@ -37,8 +37,8 @@ def valid(model, dataloader):
             output = model(inputdata)
 
             # 计算当前批次的 NMSE 和 LS NMSE
-            nmse_batch = cal_NMSE3(output.detach().cpu().numpy(), target.detach().cpu().numpy())
-            ls_nmse_batch = cal_NMSE3(inputdata.detach().cpu().numpy(), target.detach().cpu().numpy())
+            nmse_batch = cal_NMSE4(output.detach().cpu().numpy(), target.detach().cpu().numpy())
+            ls_nmse_batch = cal_NMSE4(inputdata.detach().cpu().numpy(), target.detach().cpu().numpy())
 
             # 累积 NMSE 和样本数
             batch_size = inputdata.shape[0]
@@ -85,7 +85,7 @@ def train(model, dataloader, epochs=10, lr=1e-4):
             # break
             
             with torch.no_grad():
-                nmse_train = cal_NMSE3(output.detach().cpu().numpy(),target.detach().cpu().numpy())
+                nmse_train = cal_NMSE4(output.detach().cpu().numpy(),target.detach().cpu().numpy())
         # break
         scheduler.step()      
         nmmse,ls_nmse = valid(model,dataloader)

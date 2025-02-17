@@ -3,7 +3,7 @@ tic
 K = 4; % Number of users
 M = 4; % Number of antennas 32,16,8,4,2
 
-L = 4; % Number of SIM layers
+L = 3; % Number of SIM layers
 N = 36; % Number of elements per SIM layer
 
 % sigma2 = db2pow(-126); % Noise power: -96 dBm (-126 dB)
@@ -18,7 +18,7 @@ tau_p = K; % Pilot length
 [F1, F] = Channel_SIM(M, L, N, frequency); 
 
 % Phase shift vectors
-S = 11; % Number of subframes S>ceil(N/M)
+S = 9; % Number of subframes S>ceil(N/M)
 ran_num = N*L*S; % Number of random phase shift vectors
 phase = unifrnd(0,2*pi,N,L,S,ran_num); 
 theta = exp(1i.*phase);
