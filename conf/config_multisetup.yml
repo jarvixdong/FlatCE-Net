@@ -1,8 +1,8 @@
 seed: 10
 
 dataset:
-  train_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset9_N36K4/train_Dataset_dB-25_N36_K4_L4_S12_Setup100_Reliz1000.mat
-  valid_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset9_N36K4/valid_Dataset_dB-25_N36_K4_L4_S12_Setup100_Reliz1000.mat
+  train_path: /mnt/fastdata/elq20xd/channel_estimation/dataset11/train_Dataset_dB-25_N36_K4_L4_S9_Setup200_Reliz500.mat
+  valid_path: /mnt/fastdata/elq20xd/channel_estimation/dataset11/valid_Dataset_dB-25_N36_K4_L4_S9_Setup20_Reliz500.mat
 
   # train_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset9_N36K4/train_Dataset_dB-25_N36_K4_L4_S10_Setup100_Reliz1000.mat
   # valid_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset9_N36K4/valid_Dataset_dB-25_N36_K4_L4_S10_Setup100_Reliz1000.mat
