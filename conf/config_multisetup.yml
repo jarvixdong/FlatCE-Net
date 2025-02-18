@@ -1,11 +1,11 @@
 seed: 10
 
 dataset:
-  train_path: /mnt/fastdata/elq20xd/channel_estimation/dataset11/train_Dataset_dB-25_N36_K4_L4_S9_Setup200_Reliz500.mat
-  valid_path: /mnt/fastdata/elq20xd/channel_estimation/dataset11/valid_Dataset_dB-25_N36_K4_L4_S9_Setup20_Reliz500.mat
+  # train_path: /mnt/fastdata/elq20xd/channel_estimation/dataset11/train_Dataset_dB-25_N36_K4_L4_S9_Setup200_Reliz500.mat
+  # valid_path: /mnt/fastdata/elq20xd/channel_estimation/dataset11/valid_Dataset_dB-25_N36_K4_L4_S9_Setup20_Reliz500.mat
 
-  # train_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset9_N36K4/train_Dataset_dB-25_N36_K4_L4_S10_Setup100_Reliz1000.mat
-  # valid_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset9_N36K4/valid_Dataset_dB-25_N36_K4_L4_S10_Setup100_Reliz1000.mat
+  train_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset10_N36K4_3types/v1_train_Dataset_dB-25_N36_K4_L4_S12_Setup500_Reliz1000.mat
+  valid_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset10_N36K4_3types/v1_test_Dataset_dB-25_N36_K4_L4_S12_Setup50_Reliz1000.mat
   with_Vpinv: True
 
 dataloader:
@@ -18,4 +18,4 @@ model:
   num_layers: 3
 
 logger:
-  path: logger/120225/DnCNNMultiBlock_B3Depth16_dB-15_N36K4M4_L4_S9_Set100_reaL1000_L1loss_1202_lr1e3.log
+  path: 

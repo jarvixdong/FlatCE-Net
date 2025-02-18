@@ -54,7 +54,7 @@ def valid(model, dataloader):
     
 def train(model, dataloader, epochs=10, lr=1e-4):
     optimizer = Adam(model.parameters(), lr=lr, weight_decay=1e-3)
-    scheduler = StepLR(optimizer, step_size=80, gamma=0.1)
+    scheduler = StepLR(optimizer, step_size=60, gamma=0.1)
     # criterion = nn.MSELoss()
     criterion = nn.L1Loss()
     print('loss function::',criterion)
@@ -105,15 +105,15 @@ def main_MSetup():
     cfg = get_config(config_path)
     # print('cfg:',cfg)
 
-    sys.stdout = Logger(cfg.logger.path)
-    sys.stderr = sys.stdout
+    # sys.stdout = Logger(cfg.logger.path)
+    # sys.stderr = sys.stdout
     
     nmse = cal_NMSE_by_matpath_h5(cfg.dataset.valid_path,"H_est_MMSE_all_data")
     print("NMMSE of valid dataset::",nmse)
     dataloader = BaseBunch.load_data(cfg.dataset,cfg.dataloader)
 
-    model = DnCNN_MultiBlock_ds(block=3, depth=16, image_channels=2, use_bnorm=True).to(device)
-    # model = DiaUNet1D(2,2,cfg.model.channel_index,cfg.model.num_layers).to(device)
+    # model = DnCNN_MultiBlock_ds(block=3, depth=16, image_channels=2, use_bnorm=True).to(device)
+    model = DiaUNet1D(2,2,cfg.model.channel_index,cfg.model.num_layers).to(device)
     
     # ---------------------------cal parameter------------------------
     total_params = sum(p.numel() for p in model.parameters())  # 所有参数总数
@@ -124,7 +124,8 @@ def main_MSetup():
     print('cfg:',cfg)
     print("model::",model)
     print(f"Estimated model size: {model_size_mb:.2f} MB")
-    # train(model, dataloader, epochs=400, lr=1e-3)
-    train(model, dataloader, epochs=50, lr=1e-3)
+    train(model, dataloader, epochs=300, lr=1e-2)
+    # train(model, dataloader, epochs=100, lr=1e-3)
 
 main_MSetup()
+
