@@ -3,13 +3,13 @@ tic
 K = 4; % Number of users
 M = 4; % Number of antennas 32,16,8,4,2
 
-L = 4; % Number of SIM layers
+L = 5; % Number of SIM layers
 N = 36; % Number of elements per SIM layer
 
 % sigma2 = db2pow(-126); % Noise power: -96 dBm (-126 dB)
 sigma2 = 1; % Noise power: 0dB
 frequency = 2*10^(9); % Carrier frequency
-Pt_dB = -5; % Transmit power: 10 dBm (-20 dB)
+Pt_dB = -15; % Transmit power: 10 dBm (-20 dB)
 Pt = db2pow(Pt_dB); % Transmit power
 tau_p = K; % Pilot length
 
@@ -33,7 +33,7 @@ H_norm_avg = 0;
 train_setup_num = 200; % In each setup, user locations are randomly generated
 valid_setup_num = 20; % In each setup, user locations are randomly generated
 test_setup_num = 20; % In each setup, user locations are randomly generated
-realization_num = 500; % Number of channel realizations per setup
+realization_num = 1000; % Number of channel realizations per setup
 
 % -----------------------------------train dataset part----------------------------
 H_all_train = zeros(N,K,train_setup_num*realization_num);
@@ -149,7 +149,8 @@ test_NMSE_MMSE_avg = MSE_MMSE_avg/H_norm_avg;
 
 % -----------------------------------save dataset part----------------------------
 
-dir_path = '/mnt/fastdata/elq20xd/channel_estimation/dataset11/';
+% dir_path = '/mnt/fastdata/elq20xd/channel_estimation/dataset11/';
+dir_path = '/mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset13_N36K4M4/v1_'
 
 train_data_path = strcat(dir_path, 'train','_Dataset_dB', num2str(Pt_dB), '_N', num2str(N), '_K', num2str(K), '_L', num2str(L), '_S', num2str(S), '_Setup', num2str(train_setup_num), '_Reliz', num2str(realization_num), '.mat')
 valid_data_path = strcat(dir_path, 'valid','_Dataset_dB', num2str(Pt_dB), '_N', num2str(N), '_K', num2str(K), '_L', num2str(L), '_S', num2str(S), '_Setup', num2str(valid_setup_num), '_Reliz', num2str(realization_num), '.mat')
@@ -177,6 +178,6 @@ save(test_data_path, 'H_all_data', 'H_est_LS_all_data','H_est_MMSE_all_data',"V_
 fprintf("train_NMSE_LS_avg: %.5f MMSE_avg: %.5f \n", train_NMSE_LS_avg, train_NMSE_MMSE_avg);
 fprintf("valid_NMSE_LS_avg: %.5f MMSE_avg: %.5f \n", valid_NMSE_LS_avg, valid_NMSE_MMSE_avg);
 fprintf("test_NMSE_LS_avg: %.5f MMSE_avg: %.5f \n", test_NMSE_LS_avg, test_NMSE_MMSE_avg);
-fprintf("%d,%d,%d,%d,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f\n",Pt_dB,L,M,S,train_NMSE_LS_avg, train_NMSE_MMSE_avg,valid_NMSE_LS_avg, valid_NMSE_MMSE_avg,test_NMSE_LS_avg, test_NMSE_MMSE_avg)
+fprintf("%d,%d,%d,%d,%d,%d,%d,%d,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f\n",N,K,test_setup_num,realization_num,Pt_dB,L,M,S,train_NMSE_LS_avg, train_NMSE_MMSE_avg,valid_NMSE_LS_avg, valid_NMSE_MMSE_avg,test_NMSE_LS_avg, test_NMSE_MMSE_avg)
 
 toc

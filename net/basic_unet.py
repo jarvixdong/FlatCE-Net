@@ -22,7 +22,7 @@ class DynamicDilatedConv(nn.Module):
 
         # 计算每层的通道数（先减小，然后恢复）
         self.out_channel_lst = [max(1, in_channel // (2 ** (i+1))) for i in range(len(self.dia_lst))]
-        self.out_channel_lst[-1] = out_channel  # 最后一层确保通道数恢复
+        self.out_channel_lst[-1] = self.out_channel_lst[-2]  # 最后一层确保通道数恢复
 
         prev_channel = in_channel
         for dia_i, dilation in enumerate(self.dia_lst):
@@ -53,9 +53,20 @@ class DynamicDilatedConv(nn.Module):
         outputs = []
         for layer in self.layers:
             x = layer(x)
+            # print('x and layer',x.shape)
             outputs.append(x)
 
         out = torch.cat(outputs, dim=1)  # 在通道维度拼接
         out = self.projection(out)  # 维持最终通道数和输入一致
         return out
-    
+
+
+if __name__ == "__main__":
+    # Instantiate the model
+    model = DynamicDilatedConv(32,32)
+
+    # Print model summary
+    print(model)
+    data = torch.rand(3,32,64)
+    y = model(data)
+    print('y shape:',y.shape)

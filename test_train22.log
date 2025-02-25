@@ -1,0 +1,186 @@
+Train.py PID: 47944
+
+H shape: (10000, 4, 36) (10000, 4, 36)
+NMMSE of valid dataset:: 0.055706420795849976
+num samples :: 100000
+num valid: 10000
+config_path: conf/config_multisetup.yml
+!!python/object/new:easydict.EasyDict
+state:
+  config: conf/config_multisetup.yml
+  log_path: test_train22.log
+  seed: 10
+  dataset: &id006 !!python/object/new:easydict.EasyDict
+    state:
+      train_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset10_N36K4_3types/train_Dataset_dB-10_N36_K4_L2_S9_Setup100_Reliz1000.mat
+      valid_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset10_N36K4_3types/test_Dataset_dB-10_N36_K4_L2_S9_Setup10_Reliz1000.mat
+      with_Vpinv: true
+    dictitems:
+      train_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset10_N36K4_3types/train_Dataset_dB-10_N36_K4_L2_S9_Setup100_Reliz1000.mat
+      valid_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset10_N36K4_3types/test_Dataset_dB-10_N36_K4_L2_S9_Setup10_Reliz1000.mat
+      with_Vpinv: true
+  dataloader: &id007 !!python/object/new:easydict.EasyDict
+    state:
+      shuffle: true
+      batch_size: 512
+      num_workers: 1
+    dictitems:
+      shuffle: true
+      batch_size: 512
+      num_workers: 1
+  model: &id008 !!python/object/new:easydict.EasyDict
+    state:
+      name: DnCNN_MultiBlock_ds
+      params: &id001 !!python/object/new:easydict.EasyDict
+        state:
+          block: 3
+          depth: 18
+          image_channels: 2
+          filters: 64
+          use_bnorm: true
+        dictitems:
+          block: 3
+          depth: 18
+          image_channels: 2
+          filters: 64
+          use_bnorm: true
+    dictitems:
+      name: DnCNN_MultiBlock_ds
+      params: *id001
+  logger: &id009 !!python/object/new:easydict.EasyDict
+    state:
+      path: null
+    dictitems:
+      path: null
+  trainer: &id010 !!python/object/new:easydict.EasyDict
+    state:
+      optimizer: &id004 !!python/object/new:easydict.EasyDict
+        state:
+          name: SGD
+          params: &id002 !!python/object/new:easydict.EasyDict
+            state:
+              lr: 0.01
+              momentum: 0.9
+              weight_decay: 0.001
+            dictitems:
+              lr: 0.01
+              momentum: 0.9
+              weight_decay: 0.001
+        dictitems:
+          name: SGD
+          params: *id002
+      lr_scheduler: &id005 !!python/object/new:easydict.EasyDict
+        state:
+          name: StepLR
+          params: &id003 !!python/object/new:easydict.EasyDict
+            state:
+              step_size: 50
+              gamma: 0.1
+            dictitems:
+              step_size: 50
+              gamma: 0.1
+        dictitems:
+          name: StepLR
+          params: *id003
+    dictitems:
+      optimizer: *id004
+      lr_scheduler: *id005
+dictitems:
+  config: conf/config_multisetup.yml
+  log_path: test_train22.log
+  seed: 10
+  dataset: *id006
+  dataloader: *id007
+  model: *id008
+  logger: *id009
+  trainer: *id010
+
+model:: DnCNN_MultiBlock_ds(
+  (layers): ModuleList(
+    (0-2): 3 x Sequential(
+      (0): Conv2d(2, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU(inplace=True)
+      (3): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (4): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (5): ReLU(inplace=True)
+      (6): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (7): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (8): ReLU(inplace=True)
+      (9): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (10): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (11): ReLU(inplace=True)
+      (12): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (13): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (14): ReLU(inplace=True)
+      (15): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (16): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (17): ReLU(inplace=True)
+      (18): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (19): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (20): ReLU(inplace=True)
+      (21): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (22): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (23): ReLU(inplace=True)
+      (24): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (25): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (26): ReLU(inplace=True)
+      (27): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (28): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (29): ReLU(inplace=True)
+      (30): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (31): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (32): ReLU(inplace=True)
+      (33): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (34): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (35): ReLU(inplace=True)
+      (36): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (37): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (38): ReLU(inplace=True)
+      (39): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (40): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (41): ReLU(inplace=True)
+      (42): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (43): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (44): ReLU(inplace=True)
+      (45): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (46): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (47): ReLU(inplace=True)
+      (48): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (49): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (50): ReLU(inplace=True)
+      (51): Conv2d(64, 2, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    )
+  )
+)
+Estimated model size: 6.80 MB
+optimizer: SGD (
+Parameter Group 0
+    dampening: 0
+    differentiable: False
+    foreach: None
+    fused: None
+    lr: 0.01
+    maximize: False
+    momentum: 0.9
+    nesterov: False
+    weight_decay: 0.001
+)
+scheduler: <torch.optim.lr_scheduler.StepLR object at 0x7f938d345e20>
+loss function:: L1Loss()
+[2025-02-22 20:13:56] Epoch 1/200, Loss: 56.659710, Train_MMSE: 0.25122, NMMSE: 0.175793, LS_NMSE: 0.242602, Lr: 0.01
+[2025-02-22 20:14:09] Epoch 2/200, Loss: 50.578644, Train_MMSE: 0.174519, NMMSE: 0.142827, LS_NMSE: 0.242602, Lr: 0.01
+[2025-02-22 20:14:21] Epoch 3/200, Loss: 46.657795, Train_MMSE: 0.14485, NMMSE: 0.120491, LS_NMSE: 0.242602, Lr: 0.01
+[2025-02-22 20:14:34] Epoch 4/200, Loss: 43.334194, Train_MMSE: 0.124531, NMMSE: 0.107824, LS_NMSE: 0.242602, Lr: 0.01
+[2025-02-22 20:14:47] Epoch 5/200, Loss: 41.714527, Train_MMSE: 0.11333, NMMSE: 0.102611, LS_NMSE: 0.242602, Lr: 0.01
+[2025-02-22 20:14:59] Epoch 6/200, Loss: 40.782722, Train_MMSE: 0.107195, NMMSE: 0.098114, LS_NMSE: 0.242602, Lr: 0.01
+[2025-02-22 20:15:12] Epoch 7/200, Loss: 40.375412, Train_MMSE: 0.103625, NMMSE: 0.095183, LS_NMSE: 0.242602, Lr: 0.01
+[2025-02-22 20:15:25] Epoch 8/200, Loss: 40.234516, Train_MMSE: 0.101142, NMMSE: 0.09424, LS_NMSE: 0.242602, Lr: 0.01
+[2025-02-22 20:15:40] Epoch 9/200, Loss: 39.580433, Train_MMSE: 0.09943, NMMSE: 0.093408, LS_NMSE: 0.242602, Lr: 0.01
+[2025-02-22 20:15:56] Epoch 10/200, Loss: 39.706272, Train_MMSE: 0.098095, NMMSE: 0.091805, LS_NMSE: 0.242602, Lr: 0.01
+[2025-02-22 20:16:18] Epoch 11/200, Loss: 39.348957, Train_MMSE: 0.097059, NMMSE: 0.091535, LS_NMSE: 0.242602, Lr: 0.01
+[2025-02-22 20:16:41] Epoch 12/200, Loss: 39.210548, Train_MMSE: 0.096183, NMMSE: 0.091605, LS_NMSE: 0.242602, Lr: 0.01
+[2025-02-22 20:17:04] Epoch 13/200, Loss: 39.129868, Train_MMSE: 0.095302, NMMSE: 0.08974, LS_NMSE: 0.242602, Lr: 0.01
+[2025-02-22 20:17:27] Epoch 14/200, Loss: 38.625248, Train_MMSE: 0.094585, NMMSE: 0.090308, LS_NMSE: 0.242602, Lr: 0.01
+[2025-02-22 20:17:49] Epoch 15/200, Loss: 38.442928, Train_MMSE: 0.094049, NMMSE: 0.090331, LS_NMSE: 0.242602, Lr: 0.01
+[2025-02-22 20:18:12] Epoch 16/200, Loss: 38.411823, Train_MMSE: 0.093328, NMMSE: 0.089812, LS_NMSE: 0.242602, Lr: 0.01

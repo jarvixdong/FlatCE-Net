@@ -1,36 +1,5 @@
-# nohup python train.py > logger/180225/v1_test_Dataset_dB-25_N36_K4_L3_S9_Setup50_Reliz1000_CDRN.log 2>&1 &
-
-# nohup python train.py > logger/180225/test_Dataset_dB-25_N36_K4_L4_S9_Setup50_Reliz1000.log 2>&1 &
-# nohup python train.py > logger/180225/test_Dataset_dB-25_N36_K4_L4_S9_Setup50_Reliz1000_CDRN.log 2>&1 &
-
-# nohup python train.py > logger/180225/test_Dataset_dB-25_N36_K4_L5_S9_Setup50_Reliz1000.log 2>&1 &
-# nohup python train.py > logger/180225/test_Dataset_dB-25_N36_K4_L5_S9_Setup50_Reliz1000_CDRN.log 2>&1 &
-
-# nohup python train.py > logger/180225/v1_test_Dataset_dB-25_N36_K4_L6_S9_Setup50_Reliz1000_lr1e-3.log 2>&1 & echo $! >> logger/180225//v1_test_Dataset_dB-25_N36_K4_L6_S9_Setup50_Reliz1000_lr1e-3.log
-# nohup python train.py > logger/180225/v1_test_Dataset_dB-25_N36_K4_L6_S9_Setup50_Reliz1000_CDRN_ep100.log 2>&1 & echo $! >> logger/180225//v1_test_Dataset_dB-25_N36_K4_L6_S9_Setup50_Reliz1000_CDRN_ep100.log
-
-
-# nohup python train.py > logger/180225/v1_test_Dataset_dB-25_N36_K4_L4_S10_Setup50_Reliz1000.log 2>&1 & echo $! >> logger/180225//train.log
-# nohup python train.py > logger/180225/v1_test_Dataset_dB-25_N36_K4_L4_S10_Setup50_Reliz1000_CDRN.log 2>&1 &
-
-# nohup python train.py > logger/180225/v1_test_Dataset_dB-25_N36_K4_L4_S11_Setup50_Reliz1000.log 2>&1 & echo $! >> logger/180225/v1_test_Dataset_dB-25_N36_K4_L4_S11_Setup50_Reliz1000.log
-# nohup python train.py > logger/180225/v1_test_Dataset_dB-25_N36_K4_L4_S11_Setup50_Reliz1000_CDRN.log 2>&1 &
-
-# nohup python train.py > logger/180225/v1_test_Dataset_dB-25_N36_K4_L4_S12_Setup50_Reliz1000.log 2>&1 & echo $! >> logger/180225/v1_test_Dataset_dB-25_N36_K4_L4_S12_Setup50_Reliz1000.log
-# nohup python train.py > logger/180225/v1_test_Dataset_dB-25_N36_K4_L4_S12_Setup50_Reliz1000_CDRN.log 2>&1 &
-
-# nohup python train.py > logger/180225/v1_test_Dataset_dB-25_N36_K4_L4_S13_Setup50_Reliz1000.log 2>&1 &
-# nohup python train.py > logger/180225/v1_test_Dataset_dB-25_N36_K4_L4_S13_Setup50_Reliz1000_CDRN.log 2>&1 &
-
-
-# nohup python train.py > logger/180225/test_Dataset_dB-20_N36_K4_L4_S9_Setup10_Reliz1000.log 2>&1 &
-# nohup python train.py > logger/180225/test_Dataset_dB-20_N36_K4_L4_S9_Setup10_Reliz1000_CDRN.log 2>&1 &
-
-# nohup python train.py > logger/180225/test_Dataset_dB-15_N36_K4_L4_S9_Setup10_Reliz1000.log 2>&1 &
-# nohup python train.py > logger/180225/test_Dataset_dB-15_N36_K4_L4_S9_Setup10_Reliz1000_CDRN.log 2>&1 &
-
-# nohup python train.py > logger/180225/test_Dataset_dB-10_N36_K4_L4_S9_Setup10_Reliz1000.log 2>&1 &
-# nohup python train.py > logger/180225/test_Dataset_dB-10_N36_K4_L4_S9_Setup10_Reliz1000_CDRN.log 2>&1 &
-
-# nohup python train.py > logger/180225/test_Dataset_dB-5_N36_K4_L4_S9_Setup10_Reliz1000.log 2>&1 &
-# nohup python train.py > logger/180225/test_Dataset_dB-5_N36_K4_L4_S9_Setup10_Reliz1000_CDRN.log 2>&1 &
+# LOG_PATH="logger/240225/CDRN_B3D18C64_test_Dataset_dB-15_N36_K4_L5_S9_Setup10_Reliz1000.log"
+LOG_PATH="logger/240225/flatCE_L3C16_test_Dataset_dB-15_N36_K4_L5_S9_Setup20_Reliz1000_v4.log"
+# LOG_PATH="logger/230225/LeNet_L3C512_test_Dataset_dB-10_N36_K4_L2_S9_Setup10_Reliz1000.log"
+config='conf/config_multisetup.yml'
+nohup python train.py --log_path "$LOG_PATH" --config "$config"> "$LOG_PATH" 2>&1 &

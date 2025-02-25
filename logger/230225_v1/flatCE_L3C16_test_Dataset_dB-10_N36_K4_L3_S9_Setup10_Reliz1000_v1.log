@@ -1,0 +1,508 @@
+Train.py PID: 42318
+
+H shape: (10000, 4, 36) (10000, 4, 36)
+NMMSE of valid dataset:: 0.02615903921953831
+num samples :: 100000
+num valid: 10000
+config_path: conf/config_multisetup.yml
+{'config': 'conf/config_multisetup.yml',
+ 'dataloader': {'batch_size': 512, 'num_workers': 1, 'shuffle': True},
+ 'dataset': {'train_path': '/mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset10_N36K4_3types/train_Dataset_dB-10_N36_K4_L3_S9_Setup100_Reliz1000.mat',
+             'valid_path': '/mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset10_N36K4_3types/test_Dataset_dB-10_N36_K4_L3_S9_Setup10_Reliz1000.mat',
+             'with_Vpinv': True},
+ 'log_path': 'logger/230225_v1/flatCE_L3C16_test_Dataset_dB-10_N36_K4_L3_S9_Setup10_Reliz1000_v1.log',
+ 'model': {'name': 'DiaUNet1D',
+           'params': {'base_channels': 16,
+                      'in_channels': 2,
+                      'num_layers': 3,
+                      'out_channels': 2}},
+ 'seed': 10,
+ 'trainer': {'epoch_num': 200,
+             'loss': 'SmoothL1Loss',
+             'lr_scheduler': {'name': 'StepLR',
+                              'params': {'gamma': 0.1, 'step_size': 60}},
+             'optimizer': {'name': 'Adam',
+                           'params': {'lr': 0.001, 'weight_decay': 0.001}}}}
+model:: DiaUNet1D(
+  (encoders): ModuleList(
+    (0): BasicUnetBlock(
+      (blocks): ModuleList(
+        (0): Sequential(
+          (0): Stdconv1D(
+            (conv): Conv1d(2, 16, kernel_size=(3,), stride=(1,), padding=(1,))
+            (bn): BatchNorm1d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (relu): ReLU(inplace=True)
+          )
+        )
+        (1): DynamicDilatedConv(
+          (layers): ModuleList(
+            (0): Sequential(
+              (0): Conv1d(16, 8, kernel_size=(3,), stride=(1,), padding=(1,))
+              (1): BatchNorm1d(8, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (1): Sequential(
+              (0): Conv1d(8, 4, kernel_size=(3,), stride=(1,), padding=(2,), dilation=(2,))
+              (1): BatchNorm1d(4, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (2): Sequential(
+              (0): Conv1d(4, 2, kernel_size=(3,), stride=(1,), padding=(4,), dilation=(4,))
+              (1): BatchNorm1d(2, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (3): Sequential(
+              (0): Conv1d(2, 2, kernel_size=(3,), stride=(1,), padding=(8,), dilation=(8,))
+              (1): BatchNorm1d(2, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+          )
+          (projection): Conv1d(16, 16, kernel_size=(1,), stride=(1,))
+        )
+      )
+    )
+    (1): BasicUnetBlock(
+      (blocks): ModuleList(
+        (0): Sequential(
+          (0): Stdconv1D(
+            (conv): Conv1d(16, 32, kernel_size=(3,), stride=(1,), padding=(1,))
+            (bn): BatchNorm1d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (relu): ReLU(inplace=True)
+          )
+        )
+        (1): DynamicDilatedConv(
+          (layers): ModuleList(
+            (0): Sequential(
+              (0): Conv1d(32, 16, kernel_size=(3,), stride=(1,), padding=(1,))
+              (1): BatchNorm1d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (1): Sequential(
+              (0): Conv1d(16, 8, kernel_size=(3,), stride=(1,), padding=(2,), dilation=(2,))
+              (1): BatchNorm1d(8, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (2): Sequential(
+              (0): Conv1d(8, 4, kernel_size=(3,), stride=(1,), padding=(4,), dilation=(4,))
+              (1): BatchNorm1d(4, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (3): Sequential(
+              (0): Conv1d(4, 4, kernel_size=(3,), stride=(1,), padding=(8,), dilation=(8,))
+              (1): BatchNorm1d(4, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+          )
+          (projection): Conv1d(32, 32, kernel_size=(1,), stride=(1,))
+        )
+      )
+    )
+    (2): BasicUnetBlock(
+      (blocks): ModuleList(
+        (0): Sequential(
+          (0): Stdconv1D(
+            (conv): Conv1d(32, 64, kernel_size=(3,), stride=(1,), padding=(1,))
+            (bn): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (relu): ReLU(inplace=True)
+          )
+        )
+        (1): DynamicDilatedConv(
+          (layers): ModuleList(
+            (0): Sequential(
+              (0): Conv1d(64, 32, kernel_size=(3,), stride=(1,), padding=(1,))
+              (1): BatchNorm1d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (1): Sequential(
+              (0): Conv1d(32, 16, kernel_size=(3,), stride=(1,), padding=(2,), dilation=(2,))
+              (1): BatchNorm1d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (2): Sequential(
+              (0): Conv1d(16, 8, kernel_size=(3,), stride=(1,), padding=(4,), dilation=(4,))
+              (1): BatchNorm1d(8, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (3): Sequential(
+              (0): Conv1d(8, 8, kernel_size=(3,), stride=(1,), padding=(8,), dilation=(8,))
+              (1): BatchNorm1d(8, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+          )
+          (projection): Conv1d(64, 64, kernel_size=(1,), stride=(1,))
+        )
+      )
+    )
+  )
+  (pools): ModuleList(
+    (0-2): 3 x MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (bottleneck): BasicUnetBlock(
+    (blocks): ModuleList(
+      (0): Sequential(
+        (0): Stdconv1D(
+          (conv): Conv1d(64, 128, kernel_size=(3,), stride=(1,), padding=(1,))
+          (bn): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (relu): ReLU(inplace=True)
+        )
+      )
+      (1): DynamicDilatedConv(
+        (layers): ModuleList(
+          (0): Sequential(
+            (0): Conv1d(128, 64, kernel_size=(3,), stride=(1,), padding=(1,))
+            (1): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (2): ReLU(inplace=True)
+          )
+          (1): Sequential(
+            (0): Conv1d(64, 32, kernel_size=(3,), stride=(1,), padding=(2,), dilation=(2,))
+            (1): BatchNorm1d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (2): ReLU(inplace=True)
+          )
+          (2): Sequential(
+            (0): Conv1d(32, 16, kernel_size=(3,), stride=(1,), padding=(4,), dilation=(4,))
+            (1): BatchNorm1d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (2): ReLU(inplace=True)
+          )
+          (3): Sequential(
+            (0): Conv1d(16, 16, kernel_size=(3,), stride=(1,), padding=(8,), dilation=(8,))
+            (1): BatchNorm1d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (2): ReLU(inplace=True)
+          )
+        )
+        (projection): Conv1d(128, 128, kernel_size=(1,), stride=(1,))
+      )
+    )
+  )
+  (upconvs): ModuleList(
+    (0): ConvTranspose1d(128, 64, kernel_size=(2,), stride=(2,))
+    (1): ConvTranspose1d(64, 32, kernel_size=(2,), stride=(2,))
+    (2): ConvTranspose1d(32, 16, kernel_size=(2,), stride=(2,))
+  )
+  (decoders): ModuleList(
+    (0): BasicUnetBlock(
+      (blocks): ModuleList(
+        (0): Sequential(
+          (0): Stdconv1D(
+            (conv): Conv1d(128, 64, kernel_size=(3,), stride=(1,), padding=(1,))
+            (bn): BatchNorm1d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (relu): ReLU(inplace=True)
+          )
+        )
+        (1): DynamicDilatedConv(
+          (layers): ModuleList(
+            (0): Sequential(
+              (0): Conv1d(64, 32, kernel_size=(3,), stride=(1,), padding=(1,))
+              (1): BatchNorm1d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (1): Sequential(
+              (0): Conv1d(32, 16, kernel_size=(3,), stride=(1,), padding=(2,), dilation=(2,))
+              (1): BatchNorm1d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (2): Sequential(
+              (0): Conv1d(16, 8, kernel_size=(3,), stride=(1,), padding=(4,), dilation=(4,))
+              (1): BatchNorm1d(8, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (3): Sequential(
+              (0): Conv1d(8, 8, kernel_size=(3,), stride=(1,), padding=(8,), dilation=(8,))
+              (1): BatchNorm1d(8, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+          )
+          (projection): Conv1d(64, 64, kernel_size=(1,), stride=(1,))
+        )
+      )
+    )
+    (1): BasicUnetBlock(
+      (blocks): ModuleList(
+        (0): Sequential(
+          (0): Stdconv1D(
+            (conv): Conv1d(64, 32, kernel_size=(3,), stride=(1,), padding=(1,))
+            (bn): BatchNorm1d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (relu): ReLU(inplace=True)
+          )
+        )
+        (1): DynamicDilatedConv(
+          (layers): ModuleList(
+            (0): Sequential(
+              (0): Conv1d(32, 16, kernel_size=(3,), stride=(1,), padding=(1,))
+              (1): BatchNorm1d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (1): Sequential(
+              (0): Conv1d(16, 8, kernel_size=(3,), stride=(1,), padding=(2,), dilation=(2,))
+              (1): BatchNorm1d(8, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (2): Sequential(
+              (0): Conv1d(8, 4, kernel_size=(3,), stride=(1,), padding=(4,), dilation=(4,))
+              (1): BatchNorm1d(4, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (3): Sequential(
+              (0): Conv1d(4, 4, kernel_size=(3,), stride=(1,), padding=(8,), dilation=(8,))
+              (1): BatchNorm1d(4, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+          )
+          (projection): Conv1d(32, 32, kernel_size=(1,), stride=(1,))
+        )
+      )
+    )
+    (2): BasicUnetBlock(
+      (blocks): ModuleList(
+        (0): Sequential(
+          (0): Stdconv1D(
+            (conv): Conv1d(32, 16, kernel_size=(3,), stride=(1,), padding=(1,))
+            (bn): BatchNorm1d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (relu): ReLU(inplace=True)
+          )
+        )
+        (1): DynamicDilatedConv(
+          (layers): ModuleList(
+            (0): Sequential(
+              (0): Conv1d(16, 8, kernel_size=(3,), stride=(1,), padding=(1,))
+              (1): BatchNorm1d(8, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (1): Sequential(
+              (0): Conv1d(8, 4, kernel_size=(3,), stride=(1,), padding=(2,), dilation=(2,))
+              (1): BatchNorm1d(4, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (2): Sequential(
+              (0): Conv1d(4, 2, kernel_size=(3,), stride=(1,), padding=(4,), dilation=(4,))
+              (1): BatchNorm1d(2, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (3): Sequential(
+              (0): Conv1d(2, 2, kernel_size=(3,), stride=(1,), padding=(8,), dilation=(8,))
+              (1): BatchNorm1d(2, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+          )
+          (projection): Conv1d(16, 16, kernel_size=(1,), stride=(1,))
+        )
+      )
+    )
+  )
+  (final_conv): Conv1d(16, 2, kernel_size=(1,), stride=(1,))
+)
+Estimated model size: 0.65 MB
+optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    lr: 0.001
+    maximize: False
+    weight_decay: 0.001
+)
+scheduler: <torch.optim.lr_scheduler.StepLR object at 0x7efc4650fb60>
+loss function:: SmoothL1Loss()
+[2025-02-23 14:04:35] Epoch 1/200, Loss: 106.080093, Train_MMSE: 0.955092, NMMSE: 0.866889, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:04:51] Epoch 2/200, Loss: 86.943542, Train_MMSE: 0.721848, NMMSE: 0.618011, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:05:08] Epoch 3/200, Loss: 70.695076, Train_MMSE: 0.551471, NMMSE: 0.467981, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:05:25] Epoch 4/200, Loss: 35.088932, Train_MMSE: 0.30215, NMMSE: 0.126051, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:05:42] Epoch 5/200, Loss: 26.171516, Train_MMSE: 0.055046, NMMSE: 0.037363, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:05:59] Epoch 6/200, Loss: 25.921518, Train_MMSE: 0.042028, NMMSE: 0.035733, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:06:16] Epoch 7/200, Loss: 25.331459, Train_MMSE: 0.040822, NMMSE: 0.035147, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:06:33] Epoch 8/200, Loss: 25.264330, Train_MMSE: 0.040082, NMMSE: 0.034556, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:06:50] Epoch 9/200, Loss: 25.209799, Train_MMSE: 0.03964, NMMSE: 0.034887, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:07:06] Epoch 10/200, Loss: 24.982763, Train_MMSE: 0.039312, NMMSE: 0.034282, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:07:24] Epoch 11/200, Loss: 24.893578, Train_MMSE: 0.03899, NMMSE: 0.033482, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:07:41] Epoch 12/200, Loss: 24.665596, Train_MMSE: 0.038773, NMMSE: 0.033693, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:07:58] Epoch 13/200, Loss: 24.702063, Train_MMSE: 0.038603, NMMSE: 0.033552, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:08:14] Epoch 14/200, Loss: 24.645121, Train_MMSE: 0.038398, NMMSE: 0.03398, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:08:31] Epoch 15/200, Loss: 24.710821, Train_MMSE: 0.038284, NMMSE: 0.032988, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:08:49] Epoch 16/200, Loss: 24.635471, Train_MMSE: 0.038143, NMMSE: 0.03337, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:09:06] Epoch 17/200, Loss: 24.574017, Train_MMSE: 0.038083, NMMSE: 0.0332, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:09:23] Epoch 18/200, Loss: 24.705463, Train_MMSE: 0.037952, NMMSE: 0.033445, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:09:40] Epoch 19/200, Loss: 24.584637, Train_MMSE: 0.037881, NMMSE: 0.032921, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:09:56] Epoch 20/200, Loss: 24.589359, Train_MMSE: 0.037805, NMMSE: 0.033012, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:10:13] Epoch 21/200, Loss: 24.564611, Train_MMSE: 0.037787, NMMSE: 0.032571, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:10:30] Epoch 22/200, Loss: 24.631815, Train_MMSE: 0.037676, NMMSE: 0.032499, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:10:47] Epoch 23/200, Loss: 24.430252, Train_MMSE: 0.037668, NMMSE: 0.032643, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:11:04] Epoch 24/200, Loss: 24.315247, Train_MMSE: 0.037647, NMMSE: 0.03297, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:11:21] Epoch 25/200, Loss: 24.285412, Train_MMSE: 0.037624, NMMSE: 0.032469, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:11:39] Epoch 26/200, Loss: 24.404114, Train_MMSE: 0.03755, NMMSE: 0.032917, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:11:56] Epoch 27/200, Loss: 24.168419, Train_MMSE: 0.037508, NMMSE: 0.032296, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:12:13] Epoch 28/200, Loss: 24.274725, Train_MMSE: 0.03745, NMMSE: 0.032796, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:12:30] Epoch 29/200, Loss: 24.376022, Train_MMSE: 0.037424, NMMSE: 0.032606, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:12:47] Epoch 30/200, Loss: 24.465065, Train_MMSE: 0.03744, NMMSE: 0.032824, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:13:03] Epoch 31/200, Loss: 24.432322, Train_MMSE: 0.037431, NMMSE: 0.0328, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:13:20] Epoch 32/200, Loss: 24.486038, Train_MMSE: 0.037354, NMMSE: 0.033753, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:13:36] Epoch 33/200, Loss: 24.364283, Train_MMSE: 0.037326, NMMSE: 0.03364, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:13:53] Epoch 34/200, Loss: 24.495430, Train_MMSE: 0.037304, NMMSE: 0.032592, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:14:10] Epoch 35/200, Loss: 24.221292, Train_MMSE: 0.037336, NMMSE: 0.033768, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:14:27] Epoch 36/200, Loss: 24.201593, Train_MMSE: 0.03728, NMMSE: 0.032153, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:14:44] Epoch 37/200, Loss: 24.333857, Train_MMSE: 0.037298, NMMSE: 0.032087, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:15:01] Epoch 38/200, Loss: 24.267279, Train_MMSE: 0.037268, NMMSE: 0.03206, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:15:18] Epoch 39/200, Loss: 24.041924, Train_MMSE: 0.03721, NMMSE: 0.032347, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:15:34] Epoch 40/200, Loss: 24.195570, Train_MMSE: 0.037198, NMMSE: 0.032545, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:15:51] Epoch 41/200, Loss: 24.405016, Train_MMSE: 0.037204, NMMSE: 0.032883, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:16:08] Epoch 42/200, Loss: 24.456299, Train_MMSE: 0.037203, NMMSE: 0.033758, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:16:25] Epoch 43/200, Loss: 24.147514, Train_MMSE: 0.037179, NMMSE: 0.032228, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:16:43] Epoch 44/200, Loss: 24.401918, Train_MMSE: 0.037139, NMMSE: 0.032483, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:16:59] Epoch 45/200, Loss: 24.234650, Train_MMSE: 0.037146, NMMSE: 0.032078, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:17:16] Epoch 46/200, Loss: 24.257790, Train_MMSE: 0.037135, NMMSE: 0.032075, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:17:33] Epoch 47/200, Loss: 24.359402, Train_MMSE: 0.037122, NMMSE: 0.032954, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:17:50] Epoch 48/200, Loss: 24.131296, Train_MMSE: 0.037106, NMMSE: 0.032203, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:18:07] Epoch 49/200, Loss: 24.169504, Train_MMSE: 0.037098, NMMSE: 0.032602, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:18:24] Epoch 50/200, Loss: 24.449533, Train_MMSE: 0.037098, NMMSE: 0.032889, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:18:41] Epoch 51/200, Loss: 24.302198, Train_MMSE: 0.037062, NMMSE: 0.032268, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:18:58] Epoch 52/200, Loss: 24.181971, Train_MMSE: 0.03705, NMMSE: 0.031986, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:19:15] Epoch 53/200, Loss: 24.108845, Train_MMSE: 0.037075, NMMSE: 0.032084, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:19:32] Epoch 54/200, Loss: 24.215855, Train_MMSE: 0.037043, NMMSE: 0.032053, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:19:49] Epoch 55/200, Loss: 24.290079, Train_MMSE: 0.037014, NMMSE: 0.032585, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:20:06] Epoch 56/200, Loss: 24.111637, Train_MMSE: 0.037042, NMMSE: 0.033268, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:20:23] Epoch 57/200, Loss: 24.103245, Train_MMSE: 0.037048, NMMSE: 0.032132, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:20:40] Epoch 58/200, Loss: 24.287382, Train_MMSE: 0.037006, NMMSE: 0.032283, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:20:57] Epoch 59/200, Loss: 24.427105, Train_MMSE: 0.036968, NMMSE: 0.032996, LS_NMSE: 0.057274, Lr: 0.001
+[2025-02-23 14:21:14] Epoch 60/200, Loss: 24.216051, Train_MMSE: 0.037003, NMMSE: 0.032991, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:21:31] Epoch 61/200, Loss: 24.168825, Train_MMSE: 0.036455, NMMSE: 0.031312, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:21:48] Epoch 62/200, Loss: 23.960537, Train_MMSE: 0.036398, NMMSE: 0.031341, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:22:05] Epoch 63/200, Loss: 24.038525, Train_MMSE: 0.036379, NMMSE: 0.031356, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:22:22] Epoch 64/200, Loss: 23.845827, Train_MMSE: 0.036379, NMMSE: 0.031324, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:22:39] Epoch 65/200, Loss: 23.997931, Train_MMSE: 0.036383, NMMSE: 0.031337, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:22:56] Epoch 66/200, Loss: 23.959749, Train_MMSE: 0.036368, NMMSE: 0.031347, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:23:13] Epoch 67/200, Loss: 24.013781, Train_MMSE: 0.036358, NMMSE: 0.031351, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:23:32] Epoch 68/200, Loss: 23.987635, Train_MMSE: 0.036365, NMMSE: 0.031362, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:23:52] Epoch 69/200, Loss: 23.870010, Train_MMSE: 0.036356, NMMSE: 0.031324, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:24:12] Epoch 70/200, Loss: 24.017933, Train_MMSE: 0.036374, NMMSE: 0.031449, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:24:36] Epoch 71/200, Loss: 23.910175, Train_MMSE: 0.036344, NMMSE: 0.031348, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:25:02] Epoch 72/200, Loss: 23.867880, Train_MMSE: 0.036354, NMMSE: 0.031347, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:25:27] Epoch 73/200, Loss: 24.012760, Train_MMSE: 0.036367, NMMSE: 0.031354, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:25:52] Epoch 74/200, Loss: 24.222366, Train_MMSE: 0.036351, NMMSE: 0.03133, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:26:18] Epoch 75/200, Loss: 24.024078, Train_MMSE: 0.036353, NMMSE: 0.031339, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:26:43] Epoch 76/200, Loss: 23.941605, Train_MMSE: 0.036343, NMMSE: 0.031368, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:27:08] Epoch 77/200, Loss: 23.912827, Train_MMSE: 0.036343, NMMSE: 0.031332, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:27:33] Epoch 78/200, Loss: 24.139126, Train_MMSE: 0.036339, NMMSE: 0.031358, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:27:58] Epoch 79/200, Loss: 24.323130, Train_MMSE: 0.036349, NMMSE: 0.031413, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:28:24] Epoch 80/200, Loss: 23.871935, Train_MMSE: 0.036327, NMMSE: 0.031388, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:28:49] Epoch 81/200, Loss: 23.890381, Train_MMSE: 0.036345, NMMSE: 0.031325, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:29:14] Epoch 82/200, Loss: 24.048861, Train_MMSE: 0.036344, NMMSE: 0.03136, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:29:39] Epoch 83/200, Loss: 24.028137, Train_MMSE: 0.036315, NMMSE: 0.031387, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:30:04] Epoch 84/200, Loss: 23.738981, Train_MMSE: 0.03632, NMMSE: 0.031394, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:30:29] Epoch 85/200, Loss: 24.039064, Train_MMSE: 0.036346, NMMSE: 0.031345, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:30:55] Epoch 86/200, Loss: 24.082331, Train_MMSE: 0.036327, NMMSE: 0.031351, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:31:20] Epoch 87/200, Loss: 23.935587, Train_MMSE: 0.0363, NMMSE: 0.031417, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:31:45] Epoch 88/200, Loss: 24.135792, Train_MMSE: 0.036313, NMMSE: 0.031349, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:32:11] Epoch 89/200, Loss: 24.157625, Train_MMSE: 0.036311, NMMSE: 0.031373, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:32:36] Epoch 90/200, Loss: 23.677635, Train_MMSE: 0.036315, NMMSE: 0.031356, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:33:02] Epoch 91/200, Loss: 24.114489, Train_MMSE: 0.036324, NMMSE: 0.031314, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:33:27] Epoch 92/200, Loss: 23.916704, Train_MMSE: 0.036311, NMMSE: 0.031341, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:33:52] Epoch 93/200, Loss: 24.049622, Train_MMSE: 0.036307, NMMSE: 0.03135, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:34:18] Epoch 94/200, Loss: 23.899954, Train_MMSE: 0.036305, NMMSE: 0.031318, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:34:44] Epoch 95/200, Loss: 24.031292, Train_MMSE: 0.036314, NMMSE: 0.031341, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:35:10] Epoch 96/200, Loss: 23.931101, Train_MMSE: 0.036312, NMMSE: 0.031371, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:35:34] Epoch 97/200, Loss: 24.051405, Train_MMSE: 0.036296, NMMSE: 0.031337, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:35:59] Epoch 98/200, Loss: 24.008341, Train_MMSE: 0.036311, NMMSE: 0.031366, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:36:25] Epoch 99/200, Loss: 24.253134, Train_MMSE: 0.036284, NMMSE: 0.03137, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:36:50] Epoch 100/200, Loss: 24.088099, Train_MMSE: 0.036295, NMMSE: 0.031313, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:37:15] Epoch 101/200, Loss: 24.130274, Train_MMSE: 0.036285, NMMSE: 0.031346, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:37:41] Epoch 102/200, Loss: 23.865772, Train_MMSE: 0.036298, NMMSE: 0.031484, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:38:07] Epoch 103/200, Loss: 24.202082, Train_MMSE: 0.036289, NMMSE: 0.031432, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:38:33] Epoch 104/200, Loss: 23.837584, Train_MMSE: 0.036292, NMMSE: 0.031424, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:38:58] Epoch 105/200, Loss: 23.844275, Train_MMSE: 0.036291, NMMSE: 0.031348, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:39:24] Epoch 106/200, Loss: 23.868265, Train_MMSE: 0.036293, NMMSE: 0.031333, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:39:50] Epoch 107/200, Loss: 24.057230, Train_MMSE: 0.036285, NMMSE: 0.031317, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:40:15] Epoch 108/200, Loss: 24.129068, Train_MMSE: 0.036282, NMMSE: 0.031345, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:40:40] Epoch 109/200, Loss: 23.797926, Train_MMSE: 0.036291, NMMSE: 0.031402, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:41:05] Epoch 110/200, Loss: 23.871641, Train_MMSE: 0.036285, NMMSE: 0.031357, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:41:31] Epoch 111/200, Loss: 24.182911, Train_MMSE: 0.036296, NMMSE: 0.031396, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:41:57] Epoch 112/200, Loss: 24.044319, Train_MMSE: 0.036287, NMMSE: 0.031334, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:42:22] Epoch 113/200, Loss: 24.052212, Train_MMSE: 0.036275, NMMSE: 0.03137, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:42:48] Epoch 114/200, Loss: 23.661753, Train_MMSE: 0.036267, NMMSE: 0.031341, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:43:13] Epoch 115/200, Loss: 24.029016, Train_MMSE: 0.03628, NMMSE: 0.031345, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:43:39] Epoch 116/200, Loss: 23.907606, Train_MMSE: 0.03628, NMMSE: 0.031343, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:44:05] Epoch 117/200, Loss: 23.904581, Train_MMSE: 0.036273, NMMSE: 0.031339, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:44:30] Epoch 118/200, Loss: 23.933653, Train_MMSE: 0.036273, NMMSE: 0.031421, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:44:56] Epoch 119/200, Loss: 23.847277, Train_MMSE: 0.036273, NMMSE: 0.031422, LS_NMSE: 0.057274, Lr: 0.0001
+[2025-02-23 14:45:22] Epoch 120/200, Loss: 23.992001, Train_MMSE: 0.036292, NMMSE: 0.031448, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:45:48] Epoch 121/200, Loss: 23.845778, Train_MMSE: 0.036172, NMMSE: 0.031261, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:46:13] Epoch 122/200, Loss: 24.349504, Train_MMSE: 0.036173, NMMSE: 0.031269, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:46:38] Epoch 123/200, Loss: 23.885410, Train_MMSE: 0.036162, NMMSE: 0.031256, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:47:04] Epoch 124/200, Loss: 23.745607, Train_MMSE: 0.036189, NMMSE: 0.031254, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:47:29] Epoch 125/200, Loss: 23.799570, Train_MMSE: 0.03615, NMMSE: 0.031258, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:47:55] Epoch 126/200, Loss: 23.776922, Train_MMSE: 0.036166, NMMSE: 0.031259, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:48:19] Epoch 127/200, Loss: 23.727903, Train_MMSE: 0.036178, NMMSE: 0.031262, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:48:46] Epoch 128/200, Loss: 23.791430, Train_MMSE: 0.036173, NMMSE: 0.031263, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:49:12] Epoch 129/200, Loss: 23.881874, Train_MMSE: 0.036151, NMMSE: 0.031272, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:49:37] Epoch 130/200, Loss: 23.859138, Train_MMSE: 0.036181, NMMSE: 0.03127, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:50:03] Epoch 131/200, Loss: 23.859711, Train_MMSE: 0.036169, NMMSE: 0.031258, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:50:28] Epoch 132/200, Loss: 24.118181, Train_MMSE: 0.03618, NMMSE: 0.031267, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:50:54] Epoch 133/200, Loss: 24.042353, Train_MMSE: 0.036187, NMMSE: 0.031266, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:51:19] Epoch 134/200, Loss: 23.892179, Train_MMSE: 0.036176, NMMSE: 0.031269, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:51:44] Epoch 135/200, Loss: 23.860559, Train_MMSE: 0.036173, NMMSE: 0.031261, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:52:10] Epoch 136/200, Loss: 23.925217, Train_MMSE: 0.036165, NMMSE: 0.031255, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:52:35] Epoch 137/200, Loss: 24.087385, Train_MMSE: 0.036167, NMMSE: 0.031257, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:53:01] Epoch 138/200, Loss: 24.076485, Train_MMSE: 0.036182, NMMSE: 0.031254, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:53:26] Epoch 139/200, Loss: 23.818594, Train_MMSE: 0.036168, NMMSE: 0.031254, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:53:51] Epoch 140/200, Loss: 23.623316, Train_MMSE: 0.036179, NMMSE: 0.031265, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:54:17] Epoch 141/200, Loss: 24.014372, Train_MMSE: 0.036168, NMMSE: 0.031284, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:54:42] Epoch 142/200, Loss: 23.895887, Train_MMSE: 0.036164, NMMSE: 0.031278, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:55:07] Epoch 143/200, Loss: 23.902651, Train_MMSE: 0.036172, NMMSE: 0.031256, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:55:33] Epoch 144/200, Loss: 23.696127, Train_MMSE: 0.036177, NMMSE: 0.031258, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:55:58] Epoch 145/200, Loss: 23.541502, Train_MMSE: 0.03616, NMMSE: 0.031255, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:56:23] Epoch 146/200, Loss: 23.944033, Train_MMSE: 0.036171, NMMSE: 0.031265, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:56:48] Epoch 147/200, Loss: 23.903666, Train_MMSE: 0.036155, NMMSE: 0.031259, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:57:14] Epoch 148/200, Loss: 23.928202, Train_MMSE: 0.036153, NMMSE: 0.031258, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:57:39] Epoch 149/200, Loss: 23.797438, Train_MMSE: 0.036165, NMMSE: 0.03127, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:58:05] Epoch 150/200, Loss: 23.936285, Train_MMSE: 0.036182, NMMSE: 0.031254, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:58:30] Epoch 151/200, Loss: 24.041979, Train_MMSE: 0.036172, NMMSE: 0.031292, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:58:56] Epoch 152/200, Loss: 23.629286, Train_MMSE: 0.036168, NMMSE: 0.031261, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:59:21] Epoch 153/200, Loss: 23.671421, Train_MMSE: 0.036174, NMMSE: 0.031259, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 14:59:46] Epoch 154/200, Loss: 23.914328, Train_MMSE: 0.036151, NMMSE: 0.031267, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:00:12] Epoch 155/200, Loss: 24.053679, Train_MMSE: 0.036146, NMMSE: 0.031259, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:00:38] Epoch 156/200, Loss: 24.006266, Train_MMSE: 0.036163, NMMSE: 0.031256, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:01:03] Epoch 157/200, Loss: 23.891289, Train_MMSE: 0.036154, NMMSE: 0.031262, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:01:29] Epoch 158/200, Loss: 23.985624, Train_MMSE: 0.036189, NMMSE: 0.031254, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:01:55] Epoch 159/200, Loss: 24.027641, Train_MMSE: 0.036156, NMMSE: 0.031262, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:02:20] Epoch 160/200, Loss: 24.075912, Train_MMSE: 0.036153, NMMSE: 0.031256, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:02:46] Epoch 161/200, Loss: 24.182310, Train_MMSE: 0.036153, NMMSE: 0.031259, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:03:12] Epoch 162/200, Loss: 23.826351, Train_MMSE: 0.036162, NMMSE: 0.031259, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:03:37] Epoch 163/200, Loss: 24.203014, Train_MMSE: 0.036157, NMMSE: 0.031278, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:04:03] Epoch 164/200, Loss: 23.887041, Train_MMSE: 0.036158, NMMSE: 0.031257, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:04:28] Epoch 165/200, Loss: 23.995632, Train_MMSE: 0.036172, NMMSE: 0.031261, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:04:53] Epoch 166/200, Loss: 23.930130, Train_MMSE: 0.036163, NMMSE: 0.031259, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:05:18] Epoch 167/200, Loss: 23.873749, Train_MMSE: 0.036168, NMMSE: 0.031262, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:05:44] Epoch 168/200, Loss: 24.189398, Train_MMSE: 0.036166, NMMSE: 0.031262, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:06:10] Epoch 169/200, Loss: 23.817251, Train_MMSE: 0.036172, NMMSE: 0.031258, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:06:32] Epoch 170/200, Loss: 23.823740, Train_MMSE: 0.036167, NMMSE: 0.031257, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:06:48] Epoch 171/200, Loss: 23.797234, Train_MMSE: 0.03615, NMMSE: 0.031256, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:07:05] Epoch 172/200, Loss: 23.825979, Train_MMSE: 0.036154, NMMSE: 0.031254, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:07:22] Epoch 173/200, Loss: 23.891752, Train_MMSE: 0.036154, NMMSE: 0.031256, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:07:38] Epoch 174/200, Loss: 23.968546, Train_MMSE: 0.036161, NMMSE: 0.031272, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:07:55] Epoch 175/200, Loss: 24.150187, Train_MMSE: 0.036161, NMMSE: 0.031282, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:08:11] Epoch 176/200, Loss: 24.099911, Train_MMSE: 0.036171, NMMSE: 0.03126, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:08:28] Epoch 177/200, Loss: 23.941782, Train_MMSE: 0.03616, NMMSE: 0.031263, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:08:44] Epoch 178/200, Loss: 23.821604, Train_MMSE: 0.036156, NMMSE: 0.03127, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:09:01] Epoch 179/200, Loss: 23.895548, Train_MMSE: 0.036175, NMMSE: 0.031258, LS_NMSE: 0.057274, Lr: 1e-05
+[2025-02-23 15:09:17] Epoch 180/200, Loss: 23.966560, Train_MMSE: 0.036162, NMMSE: 0.031259, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:09:34] Epoch 181/200, Loss: 23.723291, Train_MMSE: 0.036143, NMMSE: 0.031251, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:09:50] Epoch 182/200, Loss: 24.065241, Train_MMSE: 0.036148, NMMSE: 0.031252, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:10:07] Epoch 183/200, Loss: 24.180460, Train_MMSE: 0.036138, NMMSE: 0.03125, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:10:23] Epoch 184/200, Loss: 24.003710, Train_MMSE: 0.036162, NMMSE: 0.031253, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:10:39] Epoch 185/200, Loss: 23.745079, Train_MMSE: 0.036152, NMMSE: 0.031251, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:10:56] Epoch 186/200, Loss: 24.065638, Train_MMSE: 0.03614, NMMSE: 0.031254, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:11:13] Epoch 187/200, Loss: 23.905626, Train_MMSE: 0.036146, NMMSE: 0.031254, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:11:29] Epoch 188/200, Loss: 23.756029, Train_MMSE: 0.036156, NMMSE: 0.03125, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:11:46] Epoch 189/200, Loss: 23.923355, Train_MMSE: 0.036141, NMMSE: 0.031253, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:12:02] Epoch 190/200, Loss: 23.924700, Train_MMSE: 0.036154, NMMSE: 0.031255, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:12:19] Epoch 191/200, Loss: 23.950619, Train_MMSE: 0.036147, NMMSE: 0.031251, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:12:35] Epoch 192/200, Loss: 23.942566, Train_MMSE: 0.036143, NMMSE: 0.031254, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:12:52] Epoch 193/200, Loss: 24.124832, Train_MMSE: 0.036141, NMMSE: 0.031257, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:13:08] Epoch 194/200, Loss: 23.979261, Train_MMSE: 0.036154, NMMSE: 0.031251, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:13:25] Epoch 195/200, Loss: 23.884300, Train_MMSE: 0.036134, NMMSE: 0.031253, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:13:41] Epoch 196/200, Loss: 23.805006, Train_MMSE: 0.036139, NMMSE: 0.031258, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:13:57] Epoch 197/200, Loss: 23.793789, Train_MMSE: 0.036139, NMMSE: 0.031251, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:14:13] Epoch 198/200, Loss: 23.668240, Train_MMSE: 0.036143, NMMSE: 0.031252, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:14:30] Epoch 199/200, Loss: 24.009953, Train_MMSE: 0.036138, NMMSE: 0.031253, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06
+[2025-02-23 15:14:46] Epoch 200/200, Loss: 24.050671, Train_MMSE: 0.03616, NMMSE: 0.031259, LS_NMSE: 0.057274, Lr: 1.0000000000000002e-06

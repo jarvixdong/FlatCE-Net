@@ -1,0 +1,1 @@
+sh: line 1: 38755 Terminated              python train.py > logger/210225/test_Dataset_dB-10_N36_K4_L2_S9_Setup10_Reliz1000_lrS.log 2>&1
