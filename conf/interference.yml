@@ -1,0 +1,38 @@
+seed: 1234
+
+dataset:
+  # test_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/fixed_UEs_15GHz/valid_Dataset_dB-25_N36_K4_L4_S9_Setup20_Reliz1000Ran1.mat
+  # test_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/fixed_UEs_15GHz/train_Dataset_dB-15_N36_K4_L4_S13_Setup200_Reliz1000Ran1.mat
+  test_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/fixed_UEs_15GHz/test_Dataset_dB-15_N36_K4_L4_S9_Setup20_Reliz1000Ran1.mat
+
+dataloader:
+  shuffle: False
+  batch_size: 1000       # single GPU batch
+  num_workers: 1       # number of workers each dataloader
+
+
+# model:
+#   name: DnCNN_MultiBlock_ds
+#   params:
+#     block: 3
+#     depth: 18
+#     image_channels: 2
+#     filters: 64
+#     use_bnorm: true
+
+model:
+  name: DiaUNet1D
+  params:
+    in_channels: 2
+    out_channels: 2
+    base_channels: 64
+    num_layers: 1
+
+
+is_pretrained: True
+# resume_path: "/mnt/parscratch/users/elq20xd/channel_estimation/save_models/fixed_UEs/flatCE_L3C32_train_Dataset_dB-15_N36_K4_L5_S9_Setup200_Reliz10000/best_model.pth"
+# resume_path: "/mnt/parscratch/users/elq20xd/channel_estimation/save_models/fixed_UEs_15GHz/flatCE_L3C32_valid_Dataset_dB0_N36_K4_L4_S9_Setup20_Reliz1000Ran1/best_model.pth"
+resume_path: "/mnt/parscratch/users/elq20xd/channel_estimation/save_models/fixed_UEs_15GHz_ReduceLR/sptest_l3c32/best_model.pth"
+
+
+

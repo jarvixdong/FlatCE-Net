@@ -43,8 +43,8 @@ class BaseBunch():
         
     @classmethod
     def get_dataset(self,cfg_dataset, data_loader_params_dict:dict={}):
-        train_set = DataGenerator2(path=cfg_dataset.train_path,with_Vpinv=cfg_dataset.with_Vpinv)
-        valid_set = DataGenerator2(path=cfg_dataset.valid_path,with_Vpinv=cfg_dataset.with_Vpinv)
+        train_set = DataGenerator2(path=cfg_dataset.train_path,norm_H=cfg_dataset.norm_H)
+        valid_set = DataGenerator2(path=cfg_dataset.valid_path,norm_H=cfg_dataset.norm_H)
         return self(train_set,valid_set, **data_loader_params_dict)
     
     @classmethod

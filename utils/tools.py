@@ -1,3 +1,5 @@
+import os
+import random
 import numpy as np
 import sys
 import h5py
@@ -7,6 +9,29 @@ import torch.nn as nn
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
 
+def set_all_seed(seed=None, benchmark=True, deterministic=False, use_tf32=True):
+    """This is refered to https://github.com/lonePatient/lookahead_pytorch/blob/master/tools.py.
+    """
+    if seed is not None:
+        os.environ['PYTHONHASHSEED'] = str(seed)
+        random.seed(seed)
+        np.random.seed(seed)
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+        # some cudnn methods can be random even after fixing the seed
+        # unless you tell it to be deterministic
+    if deterministic:
+        torch.backends.cudnn.deterministic = deterministic
+        torch.backends.cudnn.benchmark = False
+    else:
+        torch.backends.cudnn.benchmark = benchmark
+    if use_tf32 and torch.__version__ > "1.8.0":
+        # only available for torch > 1.7
+        # referred from https://pytorch.org/docs/stable/notes/cuda.html#tf32-on-ampere
+        torch.backends.cuda.matmul.allow_tf32 = True
+        torch.backends.cudnn.allow_tf32 = True
+        
 
 def load_data(path):
     data = loadmat(path)

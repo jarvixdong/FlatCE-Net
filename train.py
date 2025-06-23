@@ -13,8 +13,10 @@ import torch.optim.lr_scheduler as lr_scheduler
 # from torch.utils.data import TensorDataset, DataLoader
 from utils.tools import *
 from net.cdrn import DnCNN_MultiBlock_ds
-from net.build_model import DiaUNet1D
+from net.build_model import DiaUNet1D,UEasFeatureUNet1D,UFeatureTDNN,DiaUNet1DKepSeq,FlatCEkepSeqSEVpinv
 from net.basicCNN import SimpleCNN,LeNet
+from net.lrcnn import LRCNN
+from net.attentionCE_xd import AttentionCE
 # from net import build_network
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -24,7 +26,7 @@ def parse_conf(opts=None):
 
     parser.add_argument('--config', type=str, default="")
     parser.add_argument('--log_path', type=str, default="")
-    # parser.add_argument('--local_rank', type=int, default=0)
+    parser.add_argument('--save_path', type=str, default="")
     # parser.add_argument('--node_rank', type=int, default=0)
     # parser.add_argument('--DEBUG', type=int, default=0)
     # parser.add_argument('--debug_num_samples', type=int, default=10000)
@@ -63,10 +65,10 @@ def valid(model, dataloader):
             # 将输入/目标/等辅助参数放到 GPU（可视实际需求而定）
             inputs = batch[0].cuda(non_blocking=True)
             targets = batch[1].cuda(non_blocking=True)
-            # vpinv  = batch[2].cuda(non_blocking=True)  # 如确有需要可以继续用
-
+            # vpinv  = batch[2].to(device)  # 如确有需要可以继续用
+            Vpinv =  batch[2].cuda(non_blocking=True)
             # 模型前向推理
-            outputs = model(inputs)
+            outputs = model(inputs,Vpinv)
 
             # 直接在 GPU 上计算误差平方
             diff_ls    = (inputs - targets) ** 2
@@ -86,7 +88,7 @@ def valid(model, dataloader):
 
 
     
-def train(model, criterion, optimizer, scheduler ,dataloader, epochs=10, lr=1e-4):
+def train(model, criterion, optimizer, scheduler ,dataloader, save_path, epochs=10):
     
     # criterion = nn.MSELoss()
     # criterion = nn.L1Loss()
@@ -94,20 +96,25 @@ def train(model, criterion, optimizer, scheduler ,dataloader, epochs=10, lr=1e-4
     # rayleigh_loss = RayleighKLLoss()
     rayleigh_loss = RayleighKLLoss_mat2()
     # criterion = nn.SmoothL1Loss(beta=1.0)
+    best_nmmse = 100
     for epoch in range(epochs):
         model.train()
         sum_mse = 0.0      # 累计网络输出误差平方和
         sum_target = 0.0   # 累计真值平方和
         for idx, batch in enumerate(dataloader.train_loader):
-            batch = {'inputs': batch[0].cuda(non_blocking=True),
-                    'targets': batch[1].cuda(non_blocking=True),
-                    'Vpinv': batch[2].cuda(non_blocking=True)}
+            batch = {'inputs': batch[0].to(device),
+                    'targets': batch[1].to(device),
+                    'Vpinv': batch[2].to(device)}
+            # batch = {'inputs': batch[0].cuda(non_blocking=True),
+            #         'targets': batch[1].cuda(non_blocking=True)}
+            Vpinv = batch['Vpinv']
+            # print("Vpinv shape:",Vpinv.shape)
             inputdata = batch['inputs']
             # print('input data:',inputdata[0][0])
             target = batch['targets']
             # vpinv = batch['Vpinv']
 
-            output = model(inputdata)
+            output = model(inputdata,Vpinv)
             loss = criterion(output, target)
             
 
@@ -126,8 +133,8 @@ def train(model, criterion, optimizer, scheduler ,dataloader, epochs=10, lr=1e-4
     
         # break
         nmmse,ls_nmse = valid(model,dataloader)
-        # scheduler.step(nmmse) 
-        scheduler.step()      
+        scheduler.step(nmmse) 
+        # scheduler.step()    
         
         nmmse = float(f"{nmmse:.6f}")  # 保留 6 位小数
         ls_nmse = float(f"{ls_nmse:.6f}")  # 保留 6 位小数
@@ -136,11 +143,26 @@ def train(model, criterion, optimizer, scheduler ,dataloader, epochs=10, lr=1e-4
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(f"[{current_time}] Epoch {epoch + 1}/{epochs}, Loss: {loss.item():.6f}, Train_MMSE: {nmse_train}, NMMSE: {nmmse}, LS_NMSE: {ls_nmse}, Lr: {optimizer.param_groups[0]['lr']}")
 
+        # Save model checkpoint for each epoch
+        model_save_path = os.path.join(save_path, "save_models/",f"model_epoch_{epoch+1}.pth")
+        torch.save(model.state_dict(), model_save_path)
+        # print(f"Model saved at {model_save_path}")
+
+        # Save best model based on validation loss
+        if nmmse < best_nmmse:
+            best_nmmse = nmmse
+            best_model_path = os.path.join(save_path, "best_model.pth")
+            torch.save(model.state_dict(), best_model_path)
+            # print(f"Best model updated and saved at {best_model_path}")
+            
+            
 def main_MSetup():
 
     args = parse_conf()
     cfg = get_config(args.config, args)
     print(f"Train.py PID: {os.getpid()}\n")
+    
+    set_all_seed(cfg.get("seed", 10))
     
     nmse = cal_NMSE_by_matpath_h5(cfg.dataset.valid_path,"H_est_MMSE_all_data")
     print("NMMSE of valid dataset::",nmse)
@@ -169,8 +191,19 @@ def main_MSetup():
     optimizer = optimizer_class(model.parameters(),**optimizer_params)
     print('optimizer:',optimizer)
 
+    # scheduler_params = cfg.trainer.lr_scheduler.params
+    # scheduler_class = getattr(lr_scheduler, cfg.trainer.lr_scheduler.name)
+    # scheduler = scheduler_class(optimizer, **scheduler_params)
+    scheduler_name = cfg.trainer.lr_scheduler.name
     scheduler_params = cfg.trainer.lr_scheduler.params
-    scheduler_class = getattr(lr_scheduler, cfg.trainer.lr_scheduler.name)
+
+    if scheduler_name == "ReduceLROnPlateau":
+        # 显式类型转换，防止解析成字符串
+        scheduler_params["min_lr"] = float(scheduler_params.get("min_lr", 0))
+        scheduler_params["factor"] = float(scheduler_params.get("factor", 0.1))
+        scheduler_params["threshold"] = float(scheduler_params.get("threshold", 1e-4))
+        
+    scheduler_class = getattr(lr_scheduler, scheduler_name)
     scheduler = scheduler_class(optimizer, **scheduler_params)
 
     # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
@@ -181,8 +214,12 @@ def main_MSetup():
     print('scheduler:',scheduler)
     
     loss_class = getattr(torch.nn, cfg.trainer.loss)
-    criterion = loss_class()
+    # 如果是 SmoothL1Loss，需要传递 beta 参数
+    if cfg.trainer.loss == "SmoothL1Loss":
+        criterion = loss_class(beta=cfg.trainer.beta)  # 这里 beta 从配置中获取
+    else:
+        criterion = loss_class()
 
-    train(model, criterion, optimizer, scheduler ,dataloader, epochs=cfg.trainer.epoch_num)
+    train(model, criterion, optimizer, scheduler ,dataloader, save_path=cfg.save_path, epochs=cfg.trainer.epoch_num)
 
 main_MSetup()

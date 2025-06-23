@@ -1,7 +1,50 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from abc import abstractmethod
+import numpy as np
 
+class BaseModel(nn.Module):
+    def __init__(self):
+        super().__init__()
+    
+    @abstractmethod
+    def forward(self, *inputs):
+        """
+        Forward pass logic
+
+        :return: Model output
+        """
+        raise NotImplementedError
+
+    def __str__(self):
+        """
+        Model prints with number of trainable parameters
+        """
+        model_parameters = filter(lambda p: p.requires_grad, self.parameters())
+        params = sum([np.prod(p.size()) for p in model_parameters])
+        return super().__str__() + '\nTrainable parameters: {}M'.format(params / 1e6)
+
+
+    def load_model(self, check_point_path, device=None):
+        checkpoint = torch.load(check_point_path, map_location=torch.device("cpu"))
+        if hasattr(self, "loaded_model"):
+            own_state = self.loaded_model().state_dict()
+        else:
+            own_state = self.state_dict()
+        for name, param in checkpoint.items():
+            if name not in own_state:
+                print ('{} not found'.format(name))
+                continue
+            if param.data.shape != own_state[name].shape:
+                print ('{} not match different shape'.format(name))
+                continue
+            print ('{} loaded'.format(name))
+            param = param.data
+            own_state[name].copy_(param)
+        return self, checkpoint
+    
+    
 class DnCNNBlock(nn.Module):
     def __init__(self, depth, in_channels, filters=64, use_bnorm=True):
         super(DnCNNBlock, self).__init__()
@@ -47,7 +90,7 @@ class DnCNNMultiBlock(nn.Module):
 
 
 # Define the DnCNN model in PyTorch
-class DnCNN_MultiBlock_ds(nn.Module):
+class DnCNN_MultiBlock_ds(BaseModel):
     def __init__(self, block, depth, image_channels, filters=64, use_bnorm=True):
         super(DnCNN_MultiBlock_ds, self).__init__()
         self.block = block
@@ -67,7 +110,7 @@ class DnCNN_MultiBlock_ds(nn.Module):
             block_layers.append(nn.Conv2d(filters, image_channels, kernel_size=3, padding=1, bias=False))
             self.layers.append(nn.Sequential(*block_layers))
 
-    def forward(self, x):
+    def forward(self, x,Vpinv=None):
         input_ = x
         for block in self.layers:
             x = block(x)
@@ -81,5 +124,6 @@ if __name__ == "__main__":
 
     # Print model summary
     print(model)
-    data = torch.rand(3,2,8,8)
+    data = torch.rand(3,2,4,32)
     y = model(data)
+    print('y shape:',y.shape)

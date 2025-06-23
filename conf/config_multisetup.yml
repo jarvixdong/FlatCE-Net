@@ -1,19 +1,17 @@
-seed: 10
+seed: 1234
 
 dataset:
   # train_path: /mnt/fastdata/elq20xd/channel_estimation/dataset11/train_Dataset_dB-25_N36_K4_L4_S9_Setup200_Reliz500.mat
   # valid_path: /mnt/fastdata/elq20xd/channel_estimation/dataset11/valid_Dataset_dB-25_N36_K4_L4_S9_Setup20_Reliz500.mat
 
-  # train_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset10_N36K4_3types/train_Dataset_dB-15_N36_K4_L4_S9_Setup100_Reliz1000.mat
-  # valid_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset10_N36K4_3types/test_Dataset_dB-15_N36_K4_L4_S9_Setup10_Reliz1000.mat
-  train_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset13_N36K4M4/train_Dataset_dB-15_N36_K4_L5_S9_Setup200_Reliz1000.mat
-  valid_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/dataset13_N36K4M4/test_Dataset_dB-15_N36_K4_L5_S9_Setup20_Reliz1000.mat
-
-  with_Vpinv: True
+  train_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/fixed_UEs_15GHz/train_Dataset_dB-15_N36_K4_L4_S9_Setup200_Reliz1000Ran1.mat
+  valid_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/fixed_UEs_15GHz/valid_Dataset_dB-15_N36_K4_L4_S9_Setup20_Reliz1000Ran1.mat
+  
+  norm_H: True
 
 dataloader:
   shuffle: True
-  batch_size: 512       # single GPU batch
+  batch_size: 128       # single GPU batch
   num_workers: 1       # number of workers each dataloader
 
 # model:
@@ -25,21 +23,21 @@ dataloader:
 #     filters: 64
 #     use_bnorm: true
 
-model:
-  name: DiaUNet1D
-  params:
-    in_channels: 2
-    out_channels: 2
-    base_channels: 16
-    num_layers: 3
-
 # model:
-#   name: LeNet
+#   name: DiaUNet1D
 #   params:
 #     in_channels: 2
 #     out_channels: 2
-#     hidden_dim: 512
-#     num_fc_layers: 3
+#     base_channels: 32
+#     num_layers: 1
+#     withVpinv: False
+
+model:
+  name: AttentionCE
+  params:
+    in_channels: 2
+    feature_dim: 256
+
 
 trainer:
   optimizer: 
@@ -48,18 +46,19 @@ trainer:
       lr: 0.001
       weight_decay: 0.001
 
-    # name: "SGD"
-    # params:
-    #   lr: 0.01
-    #   momentum: 0.9
-    #   weight_decay: 0.001
-
   lr_scheduler:
-    name: StepLR
+    name: ReduceLROnPlateau
     params:
-      step_size: 60
-      gamma: 0.1
+      factor: 0.1
+      patience: 10
+      min_lr: 1e-6
+      threshold: 0.001
+      threshold_mode: "abs"
 
-  epoch_num: 240
+  epoch_num: 100
 
   loss: L1Loss  #L1Loss  MSELoss SmoothL1Loss
+  # beta: 0.053
+
+  is_finetune: Flase
+  path: None
