@@ -17,6 +17,7 @@ from utils.tools import *
 from net.cdrn import DnCNN_MultiBlock_ds
 from net.build_model import DiaUNet1D
 from net.basicCNN import SimpleCNN,LeNet
+from net.attentionCE_xd import AttentionCE
 
 
 np.set_printoptions(suppress=True)  # 禁用科学计数法
@@ -62,7 +63,7 @@ def main1():
 
     set_all_seed(cfg.get("seed", 10))
 
-    test_dataset = DataGenerator2(path=cfg.dataset.test_path,with_Vpinv=False)
+    test_dataset = DataGenerator2(path=cfg.dataset.test_path,norm_H=False)
     dataloader = DataLoader(test_dataset,batch_size = cfg.dataloader.batch_size,shuffle=cfg.dataloader.shuffle)
     
     model = build_network(cfg.model).to(device)

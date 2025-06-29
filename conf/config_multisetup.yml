@@ -4,8 +4,8 @@ dataset:
   # train_path: /mnt/fastdata/elq20xd/channel_estimation/dataset11/train_Dataset_dB-25_N36_K4_L4_S9_Setup200_Reliz500.mat
   # valid_path: /mnt/fastdata/elq20xd/channel_estimation/dataset11/valid_Dataset_dB-25_N36_K4_L4_S9_Setup20_Reliz500.mat
 
-  train_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/fixed_UEs_15GHz/train_Dataset_dB-15_N36_K4_L4_S9_Setup200_Reliz1000Ran1.mat
-  valid_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/fixed_UEs_15GHz/valid_Dataset_dB-15_N36_K4_L4_S9_Setup20_Reliz1000Ran1.mat
+  train_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/fixed_UEs_15GHz/train_Dataset_dB-15_N36_K4_L4_S10_Setup200_Reliz1000Ran1.mat
+  valid_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/fixed_UEs_15GHz/valid_Dataset_dB-15_N36_K4_L4_S10_Setup20_Reliz1000Ran1.mat
   
   norm_H: True
 
@@ -29,14 +29,14 @@ dataloader:
 #     in_channels: 2
 #     out_channels: 2
 #     base_channels: 32
-#     num_layers: 1
+#     num_layers: 2
 #     withVpinv: False
 
 model:
   name: AttentionCE
   params:
-    in_channels: 2
-    feature_dim: 256
+    in_channels: 144
+    feature_dim: 144
 
 
 trainer:

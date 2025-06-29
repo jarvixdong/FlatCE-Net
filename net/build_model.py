@@ -172,11 +172,7 @@ class DiaUNet1D(BaseModel):
         # print("x and Vpinv shape:",x.shape,Vpinv.shape)
         B, C, H, W = x.shape
         x = x.view(B, C, -1)
-        # if self.withVpinv:
-        #     Vpinv_flat = Vpinv.view(B,C,-1)
-        #     # print("x vpinflat:",x.shape,Vpinv_flat.shape)
-        #     self.linear = nn.Linear(x.shape[-1]+Vpinv_flat.shape[-1], 144).to(x.device)
-        #     x = torch.cat([x,Vpinv_flat],dim=2)
+
                 
         # 编码路径（Encoder）
         enc_outputs = []
@@ -198,8 +194,7 @@ class DiaUNet1D(BaseModel):
         # 输出层
         # print('output shape before final conv:',x.shape)
         output = self.final_conv(x)
-        # if self.withVpinv:
-        #     output = self.linear(output)
+
         output = output.view(B, C, H, W)
 
         return output

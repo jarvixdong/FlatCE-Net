@@ -18,7 +18,8 @@ class DynamicDilatedConv(nn.Module):
         self.layers = nn.ModuleList()
         
         # 计算动态膨胀率，使其适应 64 周期
-        self.dia_lst = self.calculate_dilation_rates(cycle_length)
+        # self.dia_lst = self.calculate_dilation_rates(cycle_length)
+        self.dia_lst = [1, 2, 4, 8, 16, 32]
 
         # 计算每层的通道数（先减小，然后恢复）
         self.out_channel_lst = [max(1, in_channel // (2 ** (i+1))) for i in range(len(self.dia_lst))]

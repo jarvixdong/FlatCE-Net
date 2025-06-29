@@ -17,6 +17,7 @@ from utils.tools import *
 from net.cdrn import DnCNN_MultiBlock_ds
 from net.build_model import DiaUNet1D
 from net.basicCNN import SimpleCNN,LeNet
+from thop import profile, clever_format
 
 
 np.set_printoptions(suppress=True)  # 禁用科学计数法
@@ -80,6 +81,8 @@ def main():
     # print('model:',model)
     
     model.eval()
+    dummy = torch.randn(1, 3, 224, 224)  # batch=1 输入大小
+    
     
     sum_ls_mse = 0.0   # 累计 LS 误差平方和
     sum_mse = 0.0      # 累计网络输出误差平方和
@@ -96,37 +99,30 @@ def main():
             targets = batch[1].cuda(non_blocking=True)
             # vpinv  = batch[2].to(device)  # 如确有需要可以继续用
 
+            # 模型大小查看
+            # flops, params = profile(model, inputs=(inputs,), verbose=False)
+            # flops, params = clever_format([flops, params], "%.3f")
+            # print(f"FLOPs: {flops}\nParams: {params}")
+
             # 模型前向推理
             print("input shape:",inputs.shape)
             B, C, H, W = inputs.shape
-            # inputs = inputs.view(B, C, -1)
+            inputs = inputs.view(B, C, -1)
             start_time = time.time()
             outputs = model(inputs)
             end_time = time.time()
             time_lst.append(end_time-start_time)
             print("Model interference time",end_time-start_time)
             outputs = outputs.view(B, C, H, W)
-            # print('target:',targets.shape,torch.min(targets),torch.max(targets))
-            # print("output:",outputs.shape,torch.min(outputs),torch.max(outputs))
-            # plt.imsave("figures/view_fig/diff_model_real.png",torch.abs(outputs[0][0].cpu()-targets[0][0].cpu()),cmap="gray",dpi=100)
-            # plt.imsave("figures/view_fig/target_real.png",targets[0][0].cpu(),cmap="gray",dpi=100)
-            # plt.imsave("figures/view_fig/output_real.png",outputs[0][0].cpu(),cmap="gray",dpi=100)
-            # plt.imsave("figures/view_fig/diff_model_imag.png",torch.abs(outputs[0][1].cpu()-targets[0][1].cpu()),cmap="gray",dpi=100)
-            # plt.imsave("figures/view_fig/target_imag.png",targets[0][1].cpu(),cmap="gray",dpi=100)
-            # plt.imsave("figures/view_fig/output_imag.png",outputs[0][1].cpu(),cmap="gray",dpi=100)
-            # print("targets[0][0]",targets[0][0].cpu().numpy())
-            # print('pred:',outputs[0][0].cpu().numpy())
-            # print(outputs[0][0].cpu().numpy()-targets[0][0].cpu().numpy())
 
-            # # 直接在 GPU 上计算误差平方
-            # diff_ls    = (inputs - targets) ** 2
-            # diff_model = (outputs - targets) ** 2
-            # targets_sq = targets ** 2
 
-            # # 将每个batch的误差、真值平方和累加到Python标量中
-            # sum_ls_mse += diff_ls.sum().item()
-            # sum_mse    += diff_model.sum().item()
-            # sum_target += targets_sq.sum().item()
+
+
+
+
+
+
+
             # # break
             if idx == 100:
                 break

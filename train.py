@@ -94,7 +94,7 @@ def train(model, criterion, optimizer, scheduler ,dataloader, save_path, epochs=
     # criterion = nn.L1Loss()
     print('loss function::',criterion)
     # rayleigh_loss = RayleighKLLoss()
-    rayleigh_loss = RayleighKLLoss_mat2()
+    # rayleigh_loss = RayleighKLLoss_mat2()
     # criterion = nn.SmoothL1Loss(beta=1.0)
     best_nmmse = 100
     for epoch in range(epochs):

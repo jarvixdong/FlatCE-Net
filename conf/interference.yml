@@ -3,7 +3,7 @@ seed: 1234
 dataset:
   # test_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/fixed_UEs_15GHz/valid_Dataset_dB-25_N36_K4_L4_S9_Setup20_Reliz1000Ran1.mat
   # test_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/fixed_UEs_15GHz/train_Dataset_dB-15_N36_K4_L4_S13_Setup200_Reliz1000Ran1.mat
-  test_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/fixed_UEs_15GHz/test_Dataset_dB-15_N36_K4_L4_S9_Setup20_Reliz1000Ran1.mat
+  test_path: /mnt/parscratch/users/elq20xd/channel_estimation/cc_data/fixed_UEs_15GHz/test_Dataset_dB-15_N36_K4_L4_S13_Setup20_Reliz1000Ran1.mat
 
 dataloader:
   shuffle: False
@@ -20,19 +20,24 @@ dataloader:
 #     filters: 64
 #     use_bnorm: true
 
-model:
-  name: DiaUNet1D
-  params:
-    in_channels: 2
-    out_channels: 2
-    base_channels: 64
-    num_layers: 1
+# model:
+#   name: DiaUNet1D
+#   params:
+#     in_channels: 2
+#     out_channels: 2
+#     base_channels: 32
+#     num_layers: 2
 
+model:
+  name: AttentionCE
+  params:
+    in_channels: 144
+    feature_dim: 144
 
 is_pretrained: True
 # resume_path: "/mnt/parscratch/users/elq20xd/channel_estimation/save_models/fixed_UEs/flatCE_L3C32_train_Dataset_dB-15_N36_K4_L5_S9_Setup200_Reliz10000/best_model.pth"
 # resume_path: "/mnt/parscratch/users/elq20xd/channel_estimation/save_models/fixed_UEs_15GHz/flatCE_L3C32_valid_Dataset_dB0_N36_K4_L4_S9_Setup20_Reliz1000Ran1/best_model.pth"
-resume_path: "/mnt/parscratch/users/elq20xd/channel_estimation/save_models/fixed_UEs_15GHz_ReduceLR/sptest_l3c32/best_model.pth"
+resume_path: "/mnt/parscratch/users/elq20xd/channel_estimation/save_models/fixed_UEs_15GHz_ReduceLR/valid_Dataset_dB-15_N36_K4_L4_S13_Setup20_Reliz1000Ran1_attenCExd_withlinear_ResL6/best_model.pth"
 
 
 
