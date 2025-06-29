@@ -57,6 +57,22 @@ class FeatureNetwork(nn.Module):
         x = x.view(B, C, H * W)  # (B, HW, C)
         x = self.linear(x)  # (B, HW, embed_dim)
         return x
+    
+class FeatureNetwork_CNN(nn.Module):
+    def __init__(self, image_channels=2, filters=32, depth=5, use_bnorm=True):
+        super(FeatureNetwork_CNN, self).__init__()
+        layers = []
+        for i in range(depth - 1):
+            layers.append(nn.Conv2d(image_channels if i == 0 else filters, filters, kernel_size=3, padding=1, bias=False))
+            if use_bnorm:
+                layers.append(nn.BatchNorm2d(filters))
+            layers.append(nn.ReLU(inplace=True))
+        layers.append(nn.Conv2d(filters, image_channels, kernel_size=3, padding=1, bias=False))
+        self.block = nn.Sequential(*layers)
+
+    def forward(self, x):
+        return x + self.block(x)  # 加法残差连接
+    
 
 class MHA_Block(nn.Module):
     def __init__(self, dim, heads):
@@ -109,6 +125,7 @@ class AttentionCE(BaseModel):
         x = self.feature_net(x)             # (B, HW, C)
         # print('after feature net:',x.shape)
         x = self.res1(x)
+        print('x shape in attentionCE1:',x.shape)
         x = self.attn1(x)
         x = self.attn2(x)
         x = self.res1(x)
@@ -122,9 +139,43 @@ class AttentionCE(BaseModel):
         return x
 
 
+class AttentionCE2(BaseModel):
+    def __init__(self, in_channels=2, feature_dim=64, mha_dim=144, heads=4, height=4, width=32):
+        super().__init__()
+        self.H, self.W, self.C = height, width, in_channels
+        self.feature_net = FeatureNetwork_CNN(in_channels,feature_dim)
+        self.linear = nn.Linear(feature_dim, mha_dim)
+        self.attn1 = MHA_Block(mha_dim, heads)
+        self.attn2 = MHA_Block(mha_dim, heads)
+        self.res1 = ResidualBlock1DConv(2,3,2)
+        self.attn3 = MHA_Block(mha_dim, heads)
+        self.res2 = ResidualBlock1DConv(2,3,2)
+        self.attn4 = MHA_Block(mha_dim, heads)
+        self.project = nn.Linear(mha_dim, mha_dim)
+
+    def forward(self, x,Vpinv=None):
+        B, C, H, W = x.shape
+        # print('x shape:',x.shape)
+        x = self.feature_net(x)             # (B, HW, C)
+        # print('after feature net:',x.shape)
+        x = x.view(B,-1,H*W)
+        x = self.res1(x)
+        # print('after res1:',x.shape)
+        x = self.attn1(x)
+        x = self.attn2(x)
+        x = self.res1(x)
+        x = self.attn3(x)
+        x = self.res2(x)
+        x = self.attn4(x)
+        # print('x shape:',x.shape)
+        x = self.project(x)
+        x = x.view(B, C, H, W)
+        return x
+    
 if __name__ == "__main__":
     # 测试
-    model = AttentionCE(in_channels=144, feature_dim=256, mha_dim=16, heads=4, height=4, width=32)
+    # model = AttentionCE(in_channels=2, feature_dim=144, mha_dim=144, heads=4, height=4, width=32)
+    model = AttentionCE2(in_channels=2, feature_dim=64, mha_dim=144, heads=4, height=4, width=32)
     a = torch.randn(7, 2, 4, 36)
     b = model(a)
     print(model)

@@ -33,10 +33,17 @@ dataloader:
 #     withVpinv: False
 
 model:
-  name: AttentionCE
+  name: AttentionCE2
   params:
-    in_channels: 144
-    feature_dim: 144
+    in_channels: 2
+    feature_dim: 64
+    mha_dim: 144
+
+# model:
+#   name: AttentionCE
+#   params:
+#     in_channels: 144
+#     feature_dim: 144
 
 
 trainer:

@@ -16,7 +16,7 @@ from net.cdrn import DnCNN_MultiBlock_ds
 from net.build_model import DiaUNet1D,UEasFeatureUNet1D,UFeatureTDNN,DiaUNet1DKepSeq,FlatCEkepSeqSEVpinv
 from net.basicCNN import SimpleCNN,LeNet
 from net.lrcnn import LRCNN
-from net.attentionCE_xd import AttentionCE
+from net.attentionCE_xd import AttentionCE,AttentionCE2
 # from net import build_network
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

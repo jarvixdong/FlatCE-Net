@@ -5,7 +5,7 @@ CONFIG_PATH="conf/config_multisetup.yml"
 # SAVE_PATH="/mnt/parscratch/users/elq20xd/channel_estimation/save_models/fixed_UEs_15GHz/CDRN_B3D18C64_valid_Dataset_dB-15_N36_K4_L8_S9_Setup20_Reliz1000Ran1/"
 SAVE_PATH="/mnt/parscratch/users/elq20xd/channel_estimation/save_models/fixed_UEs_15GHz_ReduceLR/valid_Dataset_dB-15_N36_K4_L4_S10_Setup20_Reliz1000Ran1_"
 # SAVE_PATH="${SAVE_PATH}flatCE_l2c32dia6_sp"   # DnCNN_MultiBlock_ds flatCE_l3c16dia6
-SAVE_PATH="${SAVE_PATH}attenCExd_withlinear_ResL6"
+SAVE_PATH="${SAVE_PATH}attn_FeatureCNN"
 
 LOG_PATH="${SAVE_PATH}/train.log"
 
